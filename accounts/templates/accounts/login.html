@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Вхід — Tavero{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>🔑 Вхід в систему</h1>
+            <p>Увійдіть в свій акаунт для доступу до Tavero</p>
+        </div>
+
+        {% if form.errors %}
+            <div class="alert alert-error">
+                <p>❌ Невірний логін або пароль. Спробуйте ще раз.</p>
+            </div>
+        {% endif %}
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username">👤 Логін:</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="field-error">
+                        {% for error in form.username.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">🔒 Пароль:</label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <div class="field-error">
+                        {% for error in form.password.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">🚀 Увійти</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Ще немає акаунту? <a href="{% url 'accounts:register' %}" class="link-primary">📝 Зареєструватися</a></p>
+            <p>Хочете продавати? <a href="{% url 'accounts:seller_register' %}" class="link-primary">🚀 Стати продавцем</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

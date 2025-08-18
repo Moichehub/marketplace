@@ -1,0 +1,74 @@
+{% load i18n %}
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  {% load static %}
+  <meta charset="utf-8" />
+  <title>{% block title %}Tavero{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://unpkg.com/htmx.org@1.9.12" defer></script>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-left">
+        <a href="{% url 'home' %}" class="logo">🛍️ Tavero</a>
+      </div>
+      
+      <nav class="nav-links">
+        <a href="{% url 'home' %}">🏠 Головна</a>
+        <a href="{% url 'products:list' %}">🛍️ Товари</a>
+        {% if user.is_authenticated and not user.is_seller %}
+          <a href="{% url 'orders:cart' %}">🛒 Кошик</a>
+          <a href="{% url 'orders:order_history' %}">📋 Замовлення</a>
+        {% endif %}
+      </nav>
+
+      <div class="header-right">
+        {% if user.is_authenticated %}
+          <span class="welcome-text">Вітаю, {{ user.username }}!</span>
+          {% if user.is_seller %}
+            <a href="{% url 'products:seller_dashboard' %}" class="btn-dashboard">📊 Панель</a>
+            <a href="{% url 'products:create' %}" class="btn-add">➕ Додати товар</a>
+          {% endif %}
+          <a href="{% url 'accounts:logout' %}" class="btn-logout">Вийти</a>
+        {% else %}
+          <a href="{% url 'accounts:login' %}" class="btn-login">Вхід</a>
+          <a href="{% url 'accounts:register' %}" class="btn-register">Реєстрація</a>
+          <a href="{% url 'accounts:seller_register' %}" class="btn-seller">Продавець</a>
+        {% endif %}
+        
+        <div class="language-switcher">
+          <form action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.path }}">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}
+            <select name="language" onchange="this.form.submit()">
+              {% for language in languages %}
+                <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                  {{ language.name_local }}
+                </option>
+              {% endfor %}
+            </select>
+          </form>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; Tavero {{ now|default:2025 }}. Всі права захищені.</p>
+    </div>
+  </footer>
+</body>
+</html>

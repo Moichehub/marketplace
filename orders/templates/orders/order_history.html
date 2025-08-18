@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% load order_filters %}
+{% block title %}Історія замовлень — Маркетплейс{% endblock %}
+
+{% block content %}
+<h1>📋 Історія замовлень</h1>
+
+{% if orders %}
+    <div class="orders-list">
+        {% for order in orders %}
+        <div class="order-card">
+            <div class="order-header">
+                <h3>Замовлення #{{ order.id }}</h3>
+                <span class="order-date">{{ order.created_at|date:"d.m.Y H:i" }}</span>
+            </div>
+            
+            <div class="order-status">
+                Статус: 
+                {% if order.status == 'pending' %}
+                    <span class="status-pending">Очікує оплати</span>
+                {% elif order.status == 'paid' %}
+                    <span class="status-paid">Оплачено</span>
+                {% elif order.status == 'shipped' %}
+                    <span class="status-shipped">Відправлено</span>
+                {% endif %}
+            </div>
+            
+            <div class="order-items-summary">
+                {% for item in order.items.all %}
+                <div class="order-item-summary">
+                    <span class="item-name">{{ item.product.name }}</span>
+                    <span class="item-quantity">x{{ item.quantity }}</span>
+                    <span class="item-price">{{ item.product.price|multiply:item.quantity }} грн</span>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="order-total">
+                <strong>Загальна сума: {{ order.items.all|sum_total }} грн</strong>
+            </div>
+            
+            <div class="order-actions">
+                <a href="{% url 'orders:order_detail' order.id %}" class="btn-view-details">Переглянути деталі</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="no-orders">
+        <p>У вас поки немає замовлень.</p>
+        <a href="{% url 'products:list' %}" class="btn-start-shopping">Почати покупки</a>
+    </div>
+{% endif %}
+
+<style>
+.orders-list {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.order-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.order-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+.order-date {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.order-status {
+    margin-bottom: 15px;
+}
+
+.status-pending {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.status-paid {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.status-shipped {
+    color: #17a2b8;
+    font-weight: bold;
+}
+
+.order-items-summary {
+    margin-bottom: 15px;
+}
+
+.order-item-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.order-item-summary:last-child {
+    border-bottom: none;
+}
+
+.item-name {
+    flex: 1;
+    color: #333;
+}
+
+.item-quantity {
+    color: #666;
+    margin: 0 10px;
+}
+
+.item-price {
+    color: #2c5aa0;
+    font-weight: bold;
+}
+
+.order-total {
+    text-align: right;
+    font-size: 1.1em;
+    color: #2c5aa0;
+    margin-bottom: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.order-actions {
+    text-align: center;
+}
+
+.btn-view-details {
+    display: inline-block;
+    background-color: #2c5aa0;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.btn-view-details:hover {
+    background-color: #1e3f6b;
+    color: white;
+    text-decoration: none;
+}
+
+.no-orders {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.btn-start-shopping {
+    display: inline-block;
+    background-color: #2c5aa0;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 6px;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.btn-start-shopping:hover {
+    background-color: #1e3f6b;
+    color: white;
+    text-decoration: none;
+}
+</style>
+{% endblock %}

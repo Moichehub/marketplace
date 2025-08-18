@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Реєстрація — Tavero{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>📝 Реєстрація користувача</h1>
+            <p>Створіть свій акаунт для покупок на Tavero</p>
+        </div>
+
+        {% if form.errors %}
+            <div class="alert alert-error">
+                <p>❌ Будь ласка, виправте помилки в формі.</p>
+            </div>
+        {% endif %}
+
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username">👤 Логін:</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="field-error">
+                        {% for error in form.username.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if form.username.help_text %}
+                    <div class="help-text">{{ form.username.help_text }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_email">📧 Email:</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="field-error">
+                        {% for error in form.email.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_password1">🔒 Пароль:</label>
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <div class="field-error">
+                        {% for error in form.password1.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if form.password1.help_text %}
+                    <div class="help-text">{{ form.password1.help_text }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_password2">🔐 Підтвердження пароля:</label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <div class="field-error">
+                        {% for error in form.password2.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if form.password2.help_text %}
+                    <div class="help-text">{{ form.password2.help_text }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">🚀 Зареєструватися</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Вже маєте акаунт? <a href="{% url 'accounts:login' %}" class="link-primary">🔑 Увійти</a></p>
+            <p>Хочете продавати? <a href="{% url 'accounts:seller_register' %}" class="link-primary">🚀 Стати продавцем</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

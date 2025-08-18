@@ -1,0 +1,244 @@
+# Ukrainian translations for marketplace project.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the marketplace project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: marketplace 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-19 00:48+0300\n"
+"PO-Revision-Date: 2025-08-18 23:52+0000\n"
+"Last-Translator: \n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: .\accounts\templates\accounts\login.html:5
+#: .\accounts\templates\accounts\login.html:20
+#: .\accounts\templates\accounts\seller_register.html:20
+#: .\templates\base.html:32
+msgid "Login"
+msgstr "Вхід"
+
+#: .\accounts\templates\accounts\login.html:7
+msgid "Invalid username or password."
+msgstr "Невірний логін або пароль."
+
+#: .\accounts\templates\accounts\login.html:13
+msgid "Username"
+msgstr "Логін"
+
+#: .\accounts\templates\accounts\login.html:17
+msgid "Password"
+msgstr "Пароль"
+
+#: .\accounts\templates\accounts\login.html:23
+msgid "Don't have an account yet?"
+msgstr "Ще немає акаунту?"
+
+#: .\accounts\templates\accounts\login.html:23
+msgid "Register as a seller"
+msgstr "Зареєструватися як продавець"
+
+#: .\accounts\templates\accounts\register.html:5
+msgid "User Registration"
+msgstr "Реєстрація користувача"
+
+#: .\accounts\templates\accounts\register.html:9
+#: .\accounts\templates\accounts\seller_register.html:17
+#: .\templates\base.html:33
+msgid "Register"
+msgstr "Реєстрація"
+
+#: .\accounts\templates\accounts\seller_register.html:5
+#: .\templates\base.html:34
+msgid "Seller Registration"
+msgstr "Реєстрація Продавця"
+
+#: .\accounts\templates\accounts\seller_register.html:20
+msgid "Already have an account?"
+msgstr "Вже маєте акаунт?"
+
+#: .\products\templates\products\product_detail.html:13
+msgid "Category"
+msgstr "Категорія"
+
+#: .\products\templates\products\product_detail.html:16
+msgid "Availability"
+msgstr "Наявність"
+
+#: .\products\templates\products\product_detail.html:16
+msgid "pcs."
+msgstr "шт."
+
+#: .\products\templates\products\product_detail.html:20
+#: .\products\templates\products\product_form.html:3
+#: .\products\templates\products\product_form.html:5
+msgid "Edit Product"
+msgstr "Редагувати товар"
+
+#: .\products\templates\products\product_detail.html:26
+msgid "Quantity"
+msgstr "Кількість"
+
+#: .\products\templates\products\product_detail.html:35
+msgid "Add to Cart"
+msgstr "Додати до кошика"
+
+#: .\products\templates\products\product_detail.html:39
+msgid "Product is out of stock"
+msgstr "Товар закінчився"
+
+#: .\products\templates\products\product_detail.html:42
+msgid "Please log in to add this product to your cart"
+msgstr "Увійдіть в систему, щоб додати товар до кошика"
+
+#: .\products\templates\products\product_form.html:3
+msgid "New Product"
+msgstr "Новий товар"
+
+#: .\products\templates\products\product_form.html:5
+msgid "Create Product"
+msgstr "Створити товар"
+
+#: .\products\templates\products\product_form.html:9
+msgid "Create"
+msgstr "Створити"
+
+#: .\products\templates\products\product_form.html:9
+msgid "Save"
+msgstr "Зберегти"
+
+#: .\products\templates\products\product_list.html:4
+msgid "Product Catalog"
+msgstr "Каталог товарів"
+
+#: .\products\templates\products\product_list.html:7
+msgid "Catalog"
+msgstr "Каталог"
+
+#: .\products\templates\products\product_list.html:13
+msgid "Search..."
+msgstr "Пошук..."
+
+#: .\products\templates\products\product_list.html:15
+msgid "All Categories"
+msgstr "Усі категорії"
+
+#: .\products\templates\products\product_list.html:20
+msgid "from"
+msgstr "від"
+
+#: .\products\templates\products\product_list.html:21
+msgid "to"
+msgstr "до"
+
+#: .\templates\base.html:7 .\templates\base.html:15 .\templates\base.html:65
+#: .\templates\home.html:4
+msgid "Marketplace"
+msgstr "Маркетплейс"
+
+#: .\templates\base.html:18 .\templates\home.html:4
+msgid "Home"
+msgstr "Головна"
+
+#: .\templates\base.html:19
+msgid "Products"
+msgstr "Товари"
+
+#: .\templates\base.html:21
+msgid "Cart"
+msgstr "Кошик"
+
+#: .\templates\base.html:22
+msgid "Orders"
+msgstr "Замовлення"
+
+#: .\templates\base.html:26
+msgid "Welcome"
+msgstr "Вітаю"
+
+#: .\templates\base.html:28
+msgid "Add Product"
+msgstr "Додати товар"
+
+#: .\templates\base.html:30
+msgid "Logout"
+msgstr "Вийти"
+
+#: .\templates\base.html:65
+msgid "All rights reserved."
+msgstr ""
+
+#: .\templates\home.html:10
+msgid "Welcome to the marketplace!"
+msgstr "Вітаю у маркетплейсі!"
+
+#: .\templates\home.html:11
+msgid ""
+"Discover amazing products from trusted sellers. Shop with confidence and "
+"find exactly what you need."
+msgstr ""
+
+#: .\templates\home.html:13
+#, fuzzy
+#| msgid "Products"
+msgid "Browse Products"
+msgstr "Товари"
+
+#: .\templates\home.html:14
+msgid "Join Now"
+msgstr ""
+
+#: .\templates\home.html:23
+msgid "Wide Selection"
+msgstr ""
+
+#: .\templates\home.html:24
+msgid ""
+"Browse through thousands of products across multiple categories. From "
+"electronics to fashion, we have it all."
+msgstr ""
+
+#: .\templates\home.html:29
+msgid "Secure Shopping"
+msgstr ""
+
+#: .\templates\home.html:30
+msgid ""
+"Shop with confidence knowing your transactions are secure and your data is "
+"protected."
+msgstr ""
+
+#: .\templates\home.html:35
+msgid "Fast Delivery"
+msgstr ""
+
+#: .\templates\home.html:36
+msgid ""
+"Get your products delivered quickly and efficiently. Track your orders in "
+"real-time."
+msgstr ""
+
+#: .\templates\home.html:42
+msgid "Ready to start shopping?"
+msgstr ""
+
+#: .\templates\home.html:43
+msgid "Join thousands of satisfied customers who trust our marketplace."
+msgstr ""
+
+#: .\templates\home.html:45
+msgid "Start Shopping"
+msgstr ""
+
+#: .\templates\home.html:46
+msgid "Become a Seller"
+msgstr ""
+
+#~ msgid "Welcome to our marketplace!"
+#~ msgstr "Ласкаво просимо до нашого маркетплейсу!"

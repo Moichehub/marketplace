@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<article class="product-detail">
+  <div class="product-image">
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width:360px;">
+    {% endif %}
+  </div>
+  <div class="product-info">
+    <h1>{{ product.name }}</h1>
+    <div class="muted">Категорія: {{ product.category.name }}</div>
+    <p>{{ product.description|linebreaks }}</p>
+    <p class="price"><strong>{{ product.price }} ₴</strong></p>
+    <p class="stock">Наявність: {{ product.stock }} шт.</p>
+
+    {% if user.is_authenticated %}
+      {% if user == product.seller %}
+        <p><a href="{% url 'products:update' slug=product.slug %}" class="btn-edit">Редагувати товар</a></p>
+      {% elif not user.is_seller and product.stock > 0 %}
+        <div class="add-to-cart-section">
+          <form method="post" action="{% url 'orders:add_to_cart' product.id %}">
+            {% csrf_token %}
+            <div class="quantity-selector">
+              <label for="quantity">Кількість:</label>
+              <input type="number" 
+                     id="quantity" 
+                     name="quantity" 
+                     value="1" 
+                     min="1" 
+                     max="{{ product.stock }}"
+                     style="width: 80px; margin: 0 10px; padding: 8px;">
+            </div>
+            <button type="submit" class="btn-add-to-cart">🛒 Додати до кошика</button>
+          </form>
+        </div>
+      {% elif not user.is_seller and product.stock == 0 %}
+        <p class="out-of-stock">Товар закінчився</p>
+      {% endif %}
+    {% else %}
+      <p class="login-required">Увійдіть в систему, щоб додати товар до кошика</p>
+    {% endif %}
+  </div>
+</article>
+
+<style>
+.product-detail {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.product-image {
+    text-align: center;
+}
+
+.product-info h1 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.price {
+    font-size: 1.5em;
+    color: #2c5aa0;
+    margin: 20px 0;
+}
+
+.stock {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.add-to-cart-section {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.quantity-selector {
+    margin-bottom: 15px;
+}
+
+.quantity-selector label {
+    font-weight: bold;
+    color: #333;
+}
+
+.btn-add-to-cart {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-add-to-cart:hover {
+    background-color: #218838;
+}
+
+.btn-edit {
+    display: inline-block;
+    background-color: #ffc107;
+    color: #333;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.btn-edit:hover {
+    background-color: #e0a800;
+    color: #333;
+    text-decoration: none;
+}
+
+.out-of-stock {
+    color: #dc3545;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.login-required {
+    color: #666;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .product-detail {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+</style>
+{% endblock %}

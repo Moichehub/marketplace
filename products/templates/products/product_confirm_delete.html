@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Видалити товар — Tavero{% endblock %}
+
+{% block content %}
+<div class="delete-confirmation">
+    <div class="delete-card">
+        <div class="delete-icon">🗑️</div>
+        <h1>Підтвердження видалення</h1>
+        <p>Ви дійсно хочете видалити товар <strong>"{{ product.name }}"</strong>?</p>
+        <p>Ця дія не може бути скасована.</p>
+        
+        <form method="post" class="delete-actions">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">🗑️ Видалити товар</button>
+            <a href="{% url 'products:seller_dashboard' %}" class="btn btn-secondary">❌ Скасувати</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

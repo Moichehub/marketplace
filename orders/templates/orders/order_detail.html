@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load order_filters %}
+{% block title %}Замовлення #{{ order.id }} — Маркетплейс{% endblock %}
+
+{% block content %}
+<h1>📦 Замовлення #{{ order.id }}</h1>
+
+<div class="order-info">
+    <div class="order-header">
+        <p><strong>Дата замовлення:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
+        <p><strong>Статус:</strong> 
+            {% if order.status == 'pending' %}
+                <span class="status-pending">Очікує оплати</span>
+            {% elif order.status == 'paid' %}
+                <span class="status-paid">Оплачено</span>
+            {% elif order.status == 'shipped' %}
+                <span class="status-shipped">Відправлено</span>
+            {% endif %}
+        </p>
+    </div>
+
+    <div class="order-items">
+        <h2>Товари в замовленні:</h2>
+        {% for item in items %}
+        <div class="order-item">
+            <div class="item-info">
+                <h3>{{ item.product.name }}</h3>
+                <p class="item-description">{{ item.product.description|truncatewords:20 }}</p>
+                <p class="item-price">Ціна за одиницю: {{ item.product.price }} грн</p>
+                <p class="item-quantity">Кількість: {{ item.quantity }} шт.</p>
+            </div>
+            <div class="item-total">
+                <strong>Сума: {{ item.product.price|multiply:item.quantity }} грн</strong>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="order-summary">
+        <h2>Загальна сума замовлення: {{ total }} грн</h2>
+    </div>
+</div>
+
+<div class="order-actions">
+    <a href="{% url 'orders:order_history' %}" class="btn-back">← Назад до історії замовлень</a>
+    <a href="{% url 'products:list' %}" class="btn-continue-shopping">Продовжити покупки</a>
+</div>
+
+<style>
+.order-info {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.order-header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.order-header p {
+    margin: 5px 0;
+}
+
+.status-pending {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.status-paid {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.status-shipped {
+    color: #17a2b8;
+    font-weight: bold;
+}
+
+.order-items h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.order-item {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #f8f9fa;
+}
+
+.item-info h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.item-description {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.item-price, .item-quantity {
+    margin: 5px 0;
+    color: #666;
+}
+
+.item-total {
+    text-align: right;
+    font-size: 1.1em;
+    color: #2c5aa0;
+    margin-top: 10px;
+}
+
+.order-summary {
+    border-top: 2px solid #ddd;
+    padding-top: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.order-summary h2 {
+    color: #2c5aa0;
+    margin: 0;
+}
+
+.order-actions {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn-back, .btn-continue-shopping {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 0 10px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.btn-back {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-continue-shopping {
+    background-color: #2c5aa0;
+    color: white;
+}
+
+.btn-back:hover, .btn-continue-shopping:hover {
+    color: white;
+    text-decoration: none;
+    opacity: 0.9;
+}
+</style>
+{% endblock %}

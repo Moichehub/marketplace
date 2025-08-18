@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Панель продавця — Tavero{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Панель продавця</h1>
+        <p>Керуйте вашими товарами та переглядайте статистику</p>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📦</div>
+            <div class="stat-content">
+                <h3>{{ total_products }}</h3>
+                <p>Всього товарів</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-content">
+                <h3>{{ active_products }}</h3>
+                <p>Активних товарів</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⏸️</div>
+            <div class="stat-content">
+                <h3>{{ inactive_products }}</h3>
+                <p>Неактивних товарів</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="dashboard-actions">
+        <a href="{% url 'products:create' %}" class="btn btn-primary">➕ Додати новий товар</a>
+    </div>
+
+    <!-- Filters -->
+    <form class="dashboard-filters" method="get">
+        <input type="search" name="q" placeholder="Пошук товарів..." value="{{ request.GET.q }}">
+        <select name="category">
+            <option value="">Всі категорії</option>
+            {% for category in categories %}
+                <option value="{{ category.slug }}" {% if request.GET.category == category.slug %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+        </select>
+        <select name="status">
+            <option value="">Всі статуси</option>
+            <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Активні</option>
+            <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>Неактивні</option>
+        </select>
+        <button type="submit" class="btn btn-secondary">🔍 Фільтрувати</button>
+        <a href="{% url 'products:seller_dashboard' %}" class="btn btn-secondary">🔄 Скинути</a>
+    </form>
+
+    <!-- Products Grid -->
+    <div class="dashboard-products">
+        {% if page_obj.object_list %}
+            <div class="grid">
+                {% for product in page_obj.object_list %}
+                    <article class="card product-card">
+                        {% if product.slug %}
+                            <a href="{% url 'products:detail' slug=product.slug %}">
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                {% else %}
+                                    <div class="no-image">📷</div>
+                                {% endif %}
+                                <div class="card-content">
+                                    <h3>{{ product.name }}</h3>
+                                    <div class="muted">{{ product.category.name }}</div>
+                                    <strong>{{ product.price }} ₴</strong>
+                                    <div class="product-meta">
+                                        <span class="stock-info">Склад: {{ product.stock }} шт.</span>
+                                        <span class="status-badge {% if product.is_active %}status-active{% else %}status-inactive{% endif %}">
+                                            {% if product.is_active %}✅ Активний{% else %}⏸️ Неактивний{% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="card-actions">
+                                <a href="{% url 'products:update' slug=product.slug %}" class="btn-edit-small">✏️ Редагувати</a>
+                                <a href="{% url 'products:detail' slug=product.slug %}" class="btn-view-small">👁️ Переглянути</a>
+                                <a href="{% url 'products:delete' slug=product.slug %}" class="btn-delete-small">🗑️ Видалити</a>
+                            </div>
+                        {% else %}
+                            <div class="card-content">
+                                <h3>{{ product.name }}</h3>
+                                <div class="muted">{{ product.category.name }}</div>
+                                <strong>{{ product.price }} ₴</strong>
+                                <div class="product-meta">
+                                    <span class="stock-info">Склад: {{ product.stock }} шт.</span>
+                                    <span class="status-badge {% if product.is_active %}status-active{% else %}status-inactive{% endif %}">
+                                        {% if product.is_active %}✅ Активний{% else %}⏸️ Неактивний{% endif %}
+                                    </span>
+                                </div>
+                                <div class="alert alert-warning">
+                                    <p>⚠️ Цей товар потребує оновлення slug. Будь ласка, відредагуйте товар.</p>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <span class="btn-edit-small disabled">✏️ Редагувати</span>
+                                <span class="btn-view-small disabled">👁️ Переглянути</span>
+                                <span class="btn-delete-small disabled">🗑️ Видалити</span>
+                            </div>
+                        {% endif %}
+                    </article>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination"
+                 hx-get="{% url 'products:seller_dashboard' %}"
+                 hx-target=".dashboard-products"
+                 hx-select=".dashboard-products"
+                 hx-swap="outerHTML">
+                {% if page_obj.has_previous %}
+                    <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}page={{ page_obj.previous_page_number }}">
+                        ← Попередня
+                    </a>
+                {% endif %}
+                <span>📄 Сторінка {{ page_obj.number }} з {{ page_obj.paginator.num_pages }}</span>
+                {% if page_obj.has_next %}
+                    <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}page={{ page_obj.next_page_number }}">
+                        Наступна →
+                    </a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">📦</div>
+                <h3>У вас поки немає товарів</h3>
+                <p>Створіть свій перший товар, щоб почати продавати на Tavero</p>
+                <a href="{% url 'products:create' %}" class="btn btn-primary">➕ Додати перший товар</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

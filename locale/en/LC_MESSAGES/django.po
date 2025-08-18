@@ -1,0 +1,169 @@
+# English translations for marketplace project.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the marketplace project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: marketplace 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-18 23:52+0000\n"
+"PO-Revision-Date: 2025-08-18 23:52+0000\n"
+"Last-Translator: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/base.html:12
+msgid "Marketplace"
+msgstr "Marketplace"
+
+#: templates/base.html:25
+msgid "Home"
+msgstr "Home"
+
+#: templates/base.html:26
+msgid "Products"
+msgstr "Products"
+
+#: templates/base.html:28
+msgid "Cart"
+msgstr "Cart"
+
+#: templates/base.html:29
+msgid "Orders"
+msgstr "Orders"
+
+#: templates/base.html:32
+msgid "Welcome"
+msgstr "Welcome"
+
+#: templates/base.html:34
+msgid "Add Product"
+msgstr "Add Product"
+
+#: templates/base.html:36
+msgid "Logout"
+msgstr "Logout"
+
+#: templates/base.html:38
+msgid "Login"
+msgstr "Login"
+
+#: templates/base.html:39
+msgid "Register"
+msgstr "Register"
+
+#: templates/base.html:40
+msgid "Seller Registration"
+msgstr "Seller Registration"
+
+#: templates/home.html:6
+msgid "Welcome to the marketplace!"
+msgstr "Welcome to the marketplace!"
+
+#: templates/home.html:7
+msgid "Welcome to our marketplace!"
+msgstr "Welcome to our marketplace!"
+
+#: accounts/templates/accounts/login.html:6
+msgid "Invalid username or password."
+msgstr "Invalid username or password."
+
+#: accounts/templates/accounts/login.html:12
+msgid "Username"
+msgstr "Username"
+
+#: accounts/templates/accounts/login.html:16
+msgid "Password"
+msgstr "Password"
+
+#: accounts/templates/accounts/login.html:19
+msgid "Don't have an account yet?"
+msgstr "Don't have an account yet?"
+
+#: accounts/templates/accounts/login.html:19
+msgid "Register as a seller"
+msgstr "Register as a seller"
+
+#: accounts/templates/accounts/seller_register.html:5
+msgid "Already have an account?"
+msgstr "Already have an account?"
+
+#: accounts/templates/accounts/register.html:5
+msgid "User Registration"
+msgstr "User Registration"
+
+#: products/templates/products/product_list.html:6
+msgid "Product Catalog"
+msgstr "Product Catalog"
+
+#: products/templates/products/product_list.html:8
+msgid "Catalog"
+msgstr "Catalog"
+
+#: products/templates/products/product_list.html:13
+msgid "Search..."
+msgstr "Search..."
+
+#: products/templates/products/product_list.html:15
+msgid "All Categories"
+msgstr "All Categories"
+
+#: products/templates/products/product_list.html:18
+msgid "from"
+msgstr "from"
+
+#: products/templates/products/product_list.html:19
+msgid "to"
+msgstr "to"
+
+#: products/templates/products/product_form.html:4
+msgid "New Product"
+msgstr "New Product"
+
+#: products/templates/products/product_form.html:4
+msgid "Edit Product"
+msgstr "Edit Product"
+
+#: products/templates/products/product_form.html:6
+msgid "Create Product"
+msgstr "Create Product"
+
+#: products/templates/products/product_form.html:10
+msgid "Create"
+msgstr "Create"
+
+#: products/templates/products/product_form.html:10
+msgid "Save"
+msgstr "Save"
+
+#: products/templates/products/product_detail.html:10
+msgid "Category"
+msgstr "Category"
+
+#: products/templates/products/product_detail.html:12
+msgid "Availability"
+msgstr "Availability"
+
+#: products/templates/products/product_detail.html:12
+msgid "pcs."
+msgstr "pcs."
+
+#: products/templates/products/product_detail.html:16
+msgid "Quantity"
+msgstr "Quantity"
+
+#: products/templates/products/product_detail.html:22
+msgid "Add to Cart"
+msgstr "Add to Cart"
+
+#: products/templates/products/product_detail.html:25
+msgid "Product is out of stock"
+msgstr "Product is out of stock"
+
+#: products/templates/products/product_detail.html:28
+msgid "Please log in to add this product to your cart"
+msgstr "Please log in to add this product to your cart"

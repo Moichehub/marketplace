@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Каталог товарів{% endblock %}
+{% block content %}
+
+<h1>Каталог</h1>
+
+<form id="filters" class="filters"
+      hx-get="{% url 'products:list' %}"
+      hx-target="#grid"
+      hx-trigger="change delay:300ms, keyup delay:300ms from:#q">
+  <input id="q" name="q" type="search" placeholder="Пошук..." value="{{ request.GET.q }}">
+  <select name="category">
+    <option value="">Усі категорії</option>
+    {% for c in categories %}
+      <option value="{{ c.slug }}" {% if request.GET.category == c.slug %}selected{% endif %}>{{ c.name }}</option>
+    {% endfor %}
+  </select>
+  <input name="min_price" type="number" step="0.01" placeholder="від" value="{{ request.GET.min_price }}">
+  <input name="max_price" type="number" step="0.01" placeholder="до" value="{{ request.GET.max_price }}">
+</form>
+
+<div id="grid">
+  {% include "products/product_grid.html" %}
+</div>
+{% endblock %}

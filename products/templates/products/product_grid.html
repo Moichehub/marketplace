@@ -1,0 +1,23 @@
+<div class="grid">
+  {% if page_obj.object_list %}
+    {% for p in page_obj.object_list %}
+      {% include "products/_product_card.html" with p=p %}
+    {% endfor %}
+  {% else %}
+    <p>Нічого не знайдено.</p>
+  {% endif %}
+</div>
+
+<div class="pagination"
+     hx-get="{% url 'products:list' %}"
+     hx-target="#grid"
+     hx-select="#grid"
+     hx-swap="outerHTML">
+  {% if page_obj.has_previous %}
+    <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.min_price %}min_price={{ request.GET.min_price }}&{% endif %}{% if request.GET.max_price %}max_price={{ request.GET.max_price }}&{% endif %}page={{ page_obj.previous_page_number }}">Попередня</a>
+  {% endif %}
+  <span>Стор. {{ page_obj.number }} з {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+    <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.min_price %}min_price={{ request.GET.min_price }}&{% endif %}{% if request.GET.max_price %}max_price={{ request.GET.max_price }}&{% endif %}page={{ page_obj.next_page_number }}">Наступна</a>
+  {% endif %}
+</div>

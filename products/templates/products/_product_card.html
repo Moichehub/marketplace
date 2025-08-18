@@ -1,0 +1,16 @@
+<article class="card">
+  <a href="{% url 'products:detail' slug=p.slug %}">
+    {% if p.image %}
+      <img src="{{ p.image.url }}" alt="{{ p.name }}">
+    {% endif %}
+    <h3>{{ p.name }}</h3>
+    <div class="muted">{{ p.category.name }}</div>
+    <strong>{{ p.price }} ₴</strong>
+  </a>
+  {% if user.is_authenticated and user == p.seller %}
+    <div class="card-actions">
+      <a href="{% url 'products:update' slug=p.slug %}" class="btn-edit-small">✏️ Редагувати</a>
+      <a href="{% url 'products:delete' slug=p.slug %}" class="btn-delete-small">🗑️ Видалити</a>
+    </div>
+  {% endif %}
+</article>

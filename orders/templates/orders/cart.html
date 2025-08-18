@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% load order_filters %}
+{% block title %}Кошик — Маркетплейс{% endblock %}
+
+{% block content %}
+<h1>🛒 Кошик покупок</h1>
+
+{% if items %}
+    <div class="cart-items">
+        {% for item in items %}
+        <div class="cart-item">
+            <div class="item-info">
+                <h3>{{ item.product.name }}</h3>
+                <p class="item-description">{{ item.product.description|truncatewords:20 }}</p>
+                <p class="item-price">Ціна: {{ item.product.price }} грн</p>
+                <p class="item-stock">На складі: {{ item.product.stock }} шт.</p>
+            </div>
+            
+            <div class="item-actions">
+                <form method="post" action="{% url 'orders:update_cart_item' item.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <label for="quantity-{{ item.id }}">Кількість:</label>
+                    <input type="number" 
+                           id="quantity-{{ item.id }}" 
+                           name="quantity" 
+                           value="{{ item.quantity }}" 
+                           min="1" 
+                           max="{{ item.product.stock }}"
+                           style="width: 60px; margin: 0 10px;">
+                    <button type="submit" class="btn-update">Оновити</button>
+                </form>
+                
+                <form method="post" action="{% url 'orders:remove_from_cart' item.id %}" style="display: inline; margin-left: 10px;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-remove">Видалити</button>
+                </form>
+            </div>
+            
+            <div class="item-total">
+                <strong>Сума: {{ item.product.price|multiply:item.quantity }} грн</strong>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <div class="cart-summary">
+            <h2>Загальна сума: {{ total }} грн</h2>
+            <form method="post" action="{% url 'orders:checkout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-checkout">Оформити замовлення</button>
+            </form>
+        </div>
+    </div>
+{% else %}
+    <div class="empty-cart">
+        <p>Ваш кошик порожній.</p>
+        <a href="{% url 'products:list' %}" class="btn-continue-shopping">Продовжити покупки</a>
+    </div>
+{% endif %}
+
+<style>
+.cart-items {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.cart-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.item-info h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.item-description {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.item-price {
+    font-weight: bold;
+    color: #2c5aa0;
+    margin-bottom: 5px;
+}
+
+.item-stock {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.item-actions {
+    margin: 15px 0;
+}
+
+.btn-update, .btn-remove {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-update {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-remove {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-update:hover {
+    background-color: #218838;
+}
+
+.btn-remove:hover {
+    background-color: #c82333;
+}
+
+.item-total {
+    text-align: right;
+    font-size: 1.1em;
+    color: #2c5aa0;
+}
+
+.cart-summary {
+    border-top: 2px solid #ddd;
+    padding-top: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.cart-summary h2 {
+    color: #2c5aa0;
+    margin-bottom: 20px;
+}
+
+.btn-checkout {
+    background-color: #2c5aa0;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-checkout:hover {
+    background-color: #1e3f6b;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.btn-continue-shopping {
+    display: inline-block;
+    background-color: #2c5aa0;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 6px;
+    margin-top: 20px;
+}
+
+.btn-continue-shopping:hover {
+    background-color: #1e3f6b;
+    color: white;
+    text-decoration: none;
+}
+</style>
+{% endblock %}
