@@ -5,13 +5,13 @@
 {% block title %}Панель продавця — Tavero{% endblock %}
 
 {% block content %}
-<div class="dashboard-container">
+<div class="seller-dashboard">
     <div class="dashboard-header">
-        <h1>Панель продавця</h1>
-        <p>Керуйте вашими товарами та переглядайте статистику</p>
+        <h1>📊 Панель продавця</h1>
+        <p>Керуйте своїми товарами та замовленнями</p>
     </div>
 
-    <!-- Statistics Cards -->
+    <!-- Statistics -->
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-icon">📦</div>
@@ -28,44 +28,36 @@
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon">⏸️</div>
+            <div class="stat-icon">⭐</div>
             <div class="stat-content">
-                <h3>{{ inactive_products }}</h3>
-                <p>Неактивних товарів</p>
+                <h3>{{ total_reviews }}</h3>
+                <p>Відгуків</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+                <h3>{{ avg_rating }}</h3>
+                <p>Середній рейтинг</p>
             </div>
         </div>
     </div>
 
     <!-- Actions -->
     <div class="dashboard-actions">
-        <a href="{% url 'products:create' %}" class="btn btn-primary">➕ Додати новий товар</a>
+        <a href="{% url 'products:create' %}" class="btn btn-primary">➕ Додати товар</a>
+        {% if seller_profile %}
+            <a href="{% url 'accounts:seller_profile_edit' %}" class="btn btn-secondary">✏️ Редагувати профіль</a>
+        {% else %}
+            <a href="{% url 'accounts:seller_profile_setup' %}" class="btn btn-secondary">🏪 Налаштувати магазин</a>
+        {% endif %}
     </div>
-
-    <!-- Filters -->
-    <form class="dashboard-filters" method="get">
-        <input type="search" name="q" placeholder="Пошук товарів..." value="{{ request.GET.q }}">
-        <select name="category">
-            <option value="">Всі категорії</option>
-            {% for category in categories %}
-                <option value="{{ category.slug }}" {% if request.GET.category == category.slug %}selected{% endif %}>
-                    {{ category.name }}
-                </option>
-            {% endfor %}
-        </select>
-        <select name="status">
-            <option value="">Всі статуси</option>
-            <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Активні</option>
-            <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>Неактивні</option>
-        </select>
-        <button type="submit" class="btn btn-secondary">🔍 Фільтрувати</button>
-        <a href="{% url 'products:seller_dashboard' %}" class="btn btn-secondary">🔄 Скинути</a>
-    </form>
 
     <!-- Products Grid -->
     <div class="dashboard-products">
-        {% if page_obj.object_list %}
+        {% if products %}
             <div class="grid">
-                {% for product in page_obj.object_list %}
+                {% for product in products %}
                     <article class="card product-card">
                         {% if product.slug %}
                             <a href="{% url 'products:detail' slug=product.slug %}">
@@ -114,25 +106,6 @@
                         {% endif %}
                     </article>
                 {% endfor %}
-            </div>
-
-            <!-- Pagination -->
-            <div class="pagination"
-                 hx-get="{% url 'products:seller_dashboard' %}"
-                 hx-target=".dashboard-products"
-                 hx-select=".dashboard-products"
-                 hx-swap="outerHTML">
-                {% if page_obj.has_previous %}
-                    <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}page={{ page_obj.previous_page_number }}">
-                        ← Попередня
-                    </a>
-                {% endif %}
-                <span>📄 Сторінка {{ page_obj.number }} з {{ page_obj.paginator.num_pages }}</span>
-                {% if page_obj.has_next %}
-                    <a href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}page={{ page_obj.next_page_number }}">
-                        Наступна →
-                    </a>
-                {% endif %}
             </div>
         {% else %}
             <div class="empty-state">

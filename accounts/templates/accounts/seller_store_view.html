@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ profile.store_name }} - Tavero{% endblock %}
+
+{% block content %}
+<div class="store-page">
+    <!-- Store Header -->
+    <div class="store-header">
+        <div class="store-info">
+            {% if profile.logo %}
+                <img src="{{ profile.logo.url }}" alt="{{ profile.store_name }}" class="store-logo">
+            {% else %}
+                <div class="store-logo-placeholder">🏪</div>
+            {% endif %}
+            
+            <div class="store-details">
+                <h1>{{ profile.store_name }}</h1>
+                {% if profile.description %}
+                    <p class="store-description">{{ profile.description }}</p>
+                {% endif %}
+                
+                <div class="store-meta">
+                    <div class="store-meta-item">
+                        <span class="meta-icon">📦</span>
+                        <span>{{ total_products }} товарів</span>
+                    </div>
+                    <div class="store-meta-item">
+                        <span class="meta-icon">⭐</span>
+                        <span>{{ avg_rating }} ({{ total_reviews }} відгуків)</span>
+                    </div>
+                    {% if profile.phone %}
+                        <div class="store-meta-item">
+                            <span class="meta-icon">📞</span>
+                            <span>{{ profile.phone }}</span>
+                        </div>
+                    {% endif %}
+                    {% if profile.email_contact %}
+                        <div class="store-meta-item">
+                            <span class="meta-icon">✉️</span>
+                            <span>{{ profile.email_contact }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                {% if profile.facebook or profile.instagram or profile.telegram %}
+                    <div class="store-social">
+                        {% if profile.facebook %}
+                            <a href="{{ profile.facebook }}" target="_blank" class="social-link">📘 Facebook</a>
+                        {% endif %}
+                        {% if profile.instagram %}
+                            <a href="{{ profile.instagram }}" target="_blank" class="social-link">📷 Instagram</a>
+                        {% endif %}
+                        {% if profile.telegram %}
+                            <a href="https://t.me/{{ profile.telegram }}" target="_blank" class="social-link">📱 Telegram</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Store Information -->
+    {% if profile.payment_info or profile.shipping_info %}
+        <div class="store-info-section">
+            {% if profile.payment_info %}
+                <div class="info-card">
+                    <h3>💳 Способи оплати</h3>
+                    <p>{{ profile.payment_info|linebreaks }}</p>
+                </div>
+            {% endif %}
+            
+            {% if profile.shipping_info %}
+                <div class="info-card">
+                    <h3>🚚 Доставка</h3>
+                    <p>{{ profile.shipping_info|linebreaks }}</p>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <!-- Products Section -->
+    <div class="products-section">
+        <h2>Товари від {{ profile.store_name }}</h2>
+        
+        {% if products %}
+            <div class="products-grid">
+                {% for product in products %}
+                    <div class="product-card">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                        {% else %}
+                            <div class="no-image">🖼️</div>
+                        {% endif %}
+                        
+                        <div class="product-info">
+                            <h3 class="product-title">
+                                <a href="{% url 'products:detail' product.slug %}">{{ product.name }}</a>
+                            </h3>
+                            
+                            <div class="product-rating">
+                                <div class="stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= product.average_rating %}
+                                            <span class="star filled">★</span>
+                                        {% else %}
+                                            <span class="star">☆</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <span class="rating-text">{{ product.average_rating|floatformat:1 }}</span>
+                            </div>
+                            
+                            <p class="product-price">{{ product.price }} грн</p>
+                            
+                            <div class="product-meta">
+                                <span class="stock {% if product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+                                    {% if product.stock > 0 %}
+                                        {{ product.stock }} шт.
+                                    {% else %}
+                                        Немає в наявності
+                                    {% endif %}
+                                </span>
+                            </div>
+                            
+                            <div class="card-actions">
+                                <a href="{% url 'products:detail' product.slug %}" class="btn btn-primary btn-sm">Переглянути</a>
+                                {% if user.is_authenticated and not user.is_seller and product.stock > 0 %}
+                                    <form method="post" action="{% url 'orders:add_to_cart' product.id %}" class="inline-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-secondary btn-sm">🛒</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-products">
+                <p>У цьому магазині поки що немає товарів.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

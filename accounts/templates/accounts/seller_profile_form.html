@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if is_setup %}Налаштування магазину{% else %}Редагування профілю{% endif %} - Tavero
+{% endblock %}
+
+{% block content %}
+<div class="seller-profile-form">
+    <div class="form-header">
+        <h1>
+            {% if is_setup %}
+                🏪 Налаштування магазину
+            {% else %}
+                ✏️ Редагування профілю магазину
+            {% endif %}
+        </h1>
+        <p class="form-description">
+            {% if is_setup %}
+                Створіть профіль вашого магазину для привабливого представлення товарів
+            {% else %}
+                Оновіть інформацію про ваш магазин
+            {% endif %}
+        </p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="profile-form">
+        {% csrf_token %}
+        
+        <div class="form-sections">
+            <!-- Basic Information -->
+            <div class="form-section">
+                <h3>📋 Основна інформація</h3>
+                <div class="form-group">
+                    <label for="{{ form.store_name.id_for_label }}">Назва магазину *</label>
+                    {{ form.store_name }}
+                    {% if form.store_name.errors %}
+                        <div class="error-message">{{ form.store_name.errors.0 }}</div>
+                    {% endif %}
+                    <small class="help-text">{{ form.store_name.help_text }}</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.description.id_for_label }}">Опис магазину</label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <div class="error-message">{{ form.description.errors.0 }}</div>
+                    {% endif %}
+                    <small class="help-text">{{ form.description.help_text }}</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.logo.id_for_label }}">Логотип магазину</label>
+                    {{ form.logo }}
+                    {% if form.logo.errors %}
+                        <div class="error-message">{{ form.logo.errors.0 }}</div>
+                    {% endif %}
+                    <small class="help-text">{{ form.logo.help_text }}</small>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="form-section">
+                <h3>📞 Контактна інформація</h3>
+                <div class="form-group">
+                    <label for="{{ form.phone.id_for_label }}">Номер телефону</label>
+                    {{ form.phone }}
+                    {% if form.phone.errors %}
+                        <div class="error-message">{{ form.phone.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.email_contact.id_for_label }}">Email для зв'язку</label>
+                    {{ form.email_contact }}
+                    {% if form.email_contact.errors %}
+                        <div class="error-message">{{ form.email_contact.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.website.id_for_label }}">Веб-сайт</label>
+                    {{ form.website }}
+                    {% if form.website.errors %}
+                        <div class="error-message">{{ form.website.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Payment and Shipping -->
+            <div class="form-section">
+                <h3>💳 Оплата та доставка</h3>
+                <div class="form-group">
+                    <label for="{{ form.payment_info.id_for_label }}">Способи оплати</label>
+                    {{ form.payment_info }}
+                    {% if form.payment_info.errors %}
+                        <div class="error-message">{{ form.payment_info.errors.0 }}</div>
+                    {% endif %}
+                    <small class="help-text">{{ form.payment_info.help_text }}</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.shipping_info.id_for_label }}">Інформація про доставку</label>
+                    {{ form.shipping_info }}
+                    {% if form.shipping_info.errors %}
+                        <div class="error-message">{{ form.shipping_info.errors.0 }}</div>
+                    {% endif %}
+                    <small class="help-text">{{ form.shipping_info.help_text }}</small>
+                </div>
+            </div>
+
+            <!-- Store Settings -->
+            <div class="form-section">
+                <h3>⚙️ Налаштування магазину</h3>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        {{ form.is_active }}
+                        <span class="checkmark"></span>
+                        Активний магазин
+                    </label>
+                    <small class="help-text">{{ form.is_active.help_text }}</small>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        {{ form.auto_accept_orders }}
+                        <span class="checkmark"></span>
+                        Автоматично приймати замовлення
+                    </label>
+                    <small class="help-text">{{ form.auto_accept_orders.help_text }}</small>
+                </div>
+            </div>
+
+            <!-- Social Media -->
+            <div class="form-section">
+                <h3>🌐 Соціальні мережі</h3>
+                <div class="form-group">
+                    <label for="{{ form.facebook.id_for_label }}">Facebook сторінка</label>
+                    {{ form.facebook }}
+                    {% if form.facebook.errors %}
+                        <div class="error-message">{{ form.facebook.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.instagram.id_for_label }}">Instagram сторінка</label>
+                    {{ form.instagram }}
+                    {% if form.instagram.errors %}
+                        <div class="error-message">{{ form.instagram.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.telegram.id_for_label }}">Telegram username</label>
+                    {{ form.telegram }}
+                    {% if form.telegram.errors %}
+                        <div class="error-message">{{ form.telegram.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-large">
+                {% if is_setup %}
+                    🚀 Створити магазин
+                {% else %}
+                    💾 Зберегти зміни
+                {% endif %}
+            </button>
+            <a href="{% url 'products:seller_dashboard' %}" class="btn btn-secondary">Скасувати</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

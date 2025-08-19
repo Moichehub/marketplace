@@ -1,49 +1,46 @@
 from django.core.management.base import BaseCommand
+from products.models import Product
 from django.utils.text import slugify
-from uuid import uuid4
-from products.models import Product, Category
 
 
 class Command(BaseCommand):
-    help = 'Fix all products and categories with empty slugs'
+    help = 'Fix products with empty slugs by generating proper slugs'
 
     def handle(self, *args, **options):
-        self.stdout.write('Fixing empty slugs...')
+        self.stdout.write('🔧 Fixing products with empty slugs...')
         
-        # Fix categories with empty slugs
-        categories_fixed = 0
-        for category in Category.objects.filter(slug=''):
-            base_slug = slugify(category.name, allow_unicode=True)
-            if not base_slug:
-                base_slug = f"category-{uuid4().hex[:8]}"
-            unique_slug = base_slug
-            counter = 1
-            while Category.objects.filter(slug=unique_slug).exclude(pk=category.pk).exists():
-                counter += 1
-                unique_slug = f"{base_slug}-{counter}"
-            category.slug = unique_slug
-            category.save()
-            categories_fixed += 1
-            self.stdout.write(f'Fixed category: {category.name} -> {category.slug}')
+        # Find products with empty slugs
+        empty_slugs = Product.objects.filter(slug='')
         
-        # Fix products with empty slugs
-        products_fixed = 0
-        for product in Product.objects.filter(slug=''):
-            base_slug = slugify(product.name, allow_unicode=True)
+        if not empty_slugs:
+            self.stdout.write(self.style.SUCCESS('✅ No products with empty slugs found'))
+            return
+        
+        self.stdout.write(f'Found {empty_slugs.count()} products with empty slugs')
+        
+        fixed_count = 0
+        for product in empty_slugs:
+            self.stdout.write(f'  Fixing: {product.name} (ID: {product.id})')
+            
+            # Generate slug from name
+            base_slug = slugify(product.name)
             if not base_slug:
-                base_slug = f"product-{uuid4().hex[:8]}"
-            unique_slug = base_slug
+                # If slugify returns empty string, use a fallback
+                base_slug = f"product-{product.id}"
+            
+            # Ensure uniqueness
+            slug = base_slug
             counter = 1
-            while Product.objects.filter(slug=unique_slug).exclude(pk=product.pk).exists():
+            while Product.objects.filter(slug=slug).exclude(id=product.id).exists():
+                slug = f"{base_slug}-{counter}"
                 counter += 1
-                unique_slug = f"{base_slug}-{counter}"
-            product.slug = unique_slug
+            
+            # Update the product
+            product.slug = slug
             product.save()
-            products_fixed += 1
-            self.stdout.write(f'Fixed product: {product.name} -> {product.slug}')
+            
+            self.stdout.write(f'    → New slug: {slug}')
+            fixed_count += 1
         
-        self.stdout.write(
-            self.style.SUCCESS(
-                f'Successfully fixed {categories_fixed} categories and {products_fixed} products!'
-            )
-        )
+        self.stdout.write(self.style.SUCCESS(f'\n🎉 Successfully fixed {fixed_count} products'))
+        self.stdout.write('✅ All products now have proper slugs')

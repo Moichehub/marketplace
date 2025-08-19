@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Редагувати відгук - {{ product.name }} - Tavero{% endblock %}
+
+{% block content %}
+<div class="edit-review-page">
+    <div class="review-header">
+        <nav class="breadcrumb">
+            <a href="{% url 'home' %}">Головна</a> &gt;
+            <a href="{% url 'products:list' %}">Товари</a> &gt;
+            <a href="{% url 'products:detail' product.slug %}">{{ product.name }}</a> &gt;
+            <span>Редагувати відгук</span>
+        </nav>
+        
+        <h1>✏️ Редагувати відгук</h1>
+        <p class="product-info">
+            Товар: <strong>{{ product.name }}</strong>
+        </p>
+    </div>
+
+    <div class="review-form-container">
+        <form method="post" class="review-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.rating.id_for_label }}">Ваша оцінка *</label>
+                {{ form.rating }}
+                {% if form.rating.errors %}
+                    <div class="error-message">{{ form.rating.errors.0 }}</div>
+                {% endif %}
+                <small class="help-text">Оберіть оцінку від 1 до 5 зірок</small>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.comment.id_for_label }}">Ваш відгук *</label>
+                {{ form.comment }}
+                {% if form.comment.errors %}
+                    <div class="error-message">{{ form.comment.errors.0 }}</div>
+                {% endif %}
+                <small class="help-text">Поділіться своїми враженнями про товар</small>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">💾 Зберегти зміни</button>
+                <a href="{% url 'products:detail' product.slug %}" class="btn btn-secondary">Скасувати</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="current-review">
+        <h3>Поточний відгук</h3>
+        <div class="review-item">
+            <div class="review-header">
+                <div class="stars">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= review.rating %}
+                            <span class="star filled">★</span>
+                        {% else %}
+                            <span class="star">☆</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <span class="review-date">{{ review.created_at|date:"d.m.Y" }}</span>
+            </div>
+            <p class="review-comment">{{ review.comment }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

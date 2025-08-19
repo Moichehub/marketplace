@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ profile.store_name }} - Профіль магазину{% endblock %}
+
+{% block content %}
+<div class="seller-profile-view">
+    <div class="profile-header">
+        <div class="profile-info">
+            {% if profile.logo %}
+                <img src="{{ profile.logo.url }}" alt="{{ profile.store_name }}" class="store-logo">
+            {% else %}
+                <div class="store-logo-placeholder">🏪</div>
+            {% endif %}
+            
+            <div class="store-details">
+                <h1>{{ profile.store_name }}</h1>
+                <p class="store-description">{{ profile.description|linebreaks }}</p>
+                
+                <div class="store-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ total_products }}</span>
+                        <span class="stat-label">Товарів</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ total_reviews }}</span>
+                        <span class="stat-label">Відгуків</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ avg_rating }}</span>
+                        <span class="stat-label">Рейтинг</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ total_sales }}</span>
+                        <span class="stat-label">Продажів</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="profile-actions">
+            <a href="{% url 'accounts:seller_profile_edit' %}" class="btn btn-primary">✏️ Редагувати профіль</a>
+            <a href="{% url 'products:seller_dashboard' %}" class="btn btn-secondary">📊 Панель продавця</a>
+        </div>
+    </div>
+
+    <div class="profile-content">
+        <div class="contact-info">
+            <h2>📞 Контактна інформація</h2>
+            <div class="contact-details">
+                {% if profile.phone %}
+                    <div class="contact-item">
+                        <span class="contact-icon">📱</span>
+                        <span class="contact-text">{{ profile.phone }}</span>
+                    </div>
+                {% endif %}
+                
+                {% if profile.email %}
+                    <div class="contact-item">
+                        <span class="contact-icon">📧</span>
+                        <span class="contact-text">{{ profile.email }}</span>
+                    </div>
+                {% endif %}
+                
+                {% if profile.address %}
+                    <div class="contact-item">
+                        <span class="contact-icon">📍</span>
+                        <span class="contact-text">{{ profile.address }}</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if profile.social_media %}
+            <div class="social-media">
+                <h2>🌐 Соціальні мережі</h2>
+                <div class="social-links">
+                    {{ profile.social_media|linebreaks }}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if profile.payment_info %}
+            <div class="payment-info">
+                <h2>💳 Інформація про оплату</h2>
+                <div class="payment-details">
+                    {{ profile.payment_info|linebreaks }}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if profile.shipping_info %}
+            <div class="shipping-info">
+                <h2>🚚 Інформація про доставку</h2>
+                <div class="shipping-details">
+                    {{ profile.shipping_info|linebreaks }}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.seller-profile-view {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.profile-header {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px;
+}
+
+.profile-info {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+}
+
+.store-logo {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 3px solid #f0f0f0;
+}
+
+.store-logo-placeholder {
+    width: 120px;
+    height: 120px;
+    background: #f8f9fa;
+    border: 3px solid #e9ecef;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: #6c757d;
+}
+
+.store-details {
+    flex: 1;
+}
+
+.store-details h1 {
+    margin: 0 0 15px 0;
+    color: #2c5aa0;
+    font-size: 2.5em;
+}
+
+.store-description {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.store-stats {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    min-width: 80px;
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #2c5aa0;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 5px;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #2c5aa0;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #1e3f6b;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+    color: white;
+}
+
+.profile-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.contact-info, .social-media, .payment-info, .shipping-info {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.contact-info h2, .social-media h2, .payment-info h2, .shipping-info h2 {
+    margin: 0 0 20px 0;
+    color: #2c5aa0;
+    font-size: 1.5em;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.contact-icon {
+    font-size: 1.2em;
+    min-width: 24px;
+}
+
+.contact-text {
+    color: #333;
+    font-weight: 500;
+}
+
+.social-links, .payment-details, .shipping-details {
+    color: #666;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .profile-info {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .store-stats {
+        justify-content: center;
+    }
+    
+    .profile-actions {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .profile-content {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}

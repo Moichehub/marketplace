@@ -44,9 +44,29 @@
         
         <div class="cart-summary">
             <h2>Загальна сума: {{ total }} грн</h2>
+            
+            {% if order.payment_method %}
+                <div class="selected-payment">
+                    <h3>Обраний спосіб оплати:</h3>
+                    <div class="payment-method-display">
+                        <span class="payment-icon">{{ order.payment_method.icon }}</span>
+                        <span class="payment-name">{{ order.payment_method.name }}</span>
+                        {% if order.payment_method.description %}
+                            <span class="payment-description">{{ order.payment_method.description }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="no-payment-method">
+                    <p>⚠️ Спосіб оплати не обрано. Будь ласка, додайте товар знову та оберіть спосіб оплати.</p>
+                </div>
+            {% endif %}
+            
             <form method="post" action="{% url 'orders:checkout' %}">
                 {% csrf_token %}
-                <button type="submit" class="btn-checkout">Оформити замовлення</button>
+                <button type="submit" class="btn-checkout" {% if not order.payment_method %}disabled{% endif %}>
+                    Оформити замовлення
+                </button>
             </form>
         </div>
     </div>
@@ -177,6 +197,63 @@
     background-color: #1e3f6b;
     color: white;
     text-decoration: none;
+}
+
+.selected-payment {
+    margin: 20px 0;
+    padding: 15px;
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    background-color: #f8fff9;
+}
+
+.selected-payment h3 {
+    margin: 0 0 10px 0;
+    color: #28a745;
+    font-size: 16px;
+}
+
+.payment-method-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+.payment-icon {
+    font-size: 24px;
+}
+
+.payment-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.payment-description {
+    color: #666;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.no-payment-method {
+    margin: 20px 0;
+    padding: 15px;
+    border: 2px solid #ffc107;
+    border-radius: 8px;
+    background-color: #fffbf0;
+    color: #856404;
+}
+
+.btn-checkout:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.btn-checkout:disabled:hover {
+    background-color: #6c757d;
 }
 </style>
 {% endblock %}

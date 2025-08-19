@@ -216,25 +216,25 @@ msgstr ""
 
 #: .\templates\home.html:35
 msgid "Fast Delivery"
-msgstr ""
+msgstr "Швидка доставка"
 
 #: .\templates\home.html:36
 msgid ""
 "Get your products delivered quickly and efficiently. Track your orders in "
 "real-time."
-msgstr ""
+msgstr "Отримуйте ваші товари швидко та ефективно. Відстежуйте ваші замовлення в реальному часі."
 
 #: .\templates\home.html:42
 msgid "Ready to start shopping?"
-msgstr ""
+msgstr "Готові почати покупки?"
 
 #: .\templates\home.html:43
 msgid "Join thousands of satisfied customers who trust our marketplace."
-msgstr ""
+msgstr "Приєднуйтесь до тисяч задоволених клієнтів, які довіряють нашому маркетплейсу."
 
 #: .\templates\home.html:45
 msgid "Start Shopping"
-msgstr ""
+msgstr "Почати покупки"
 
 #: .\templates\home.html:46
 msgid "Become a Seller"

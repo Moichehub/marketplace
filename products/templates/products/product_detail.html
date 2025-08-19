@@ -1,142 +1,288 @@
 {% extends "base.html" %}
-{% block title %}{{ product.name }}{% endblock %}
-{% block content %}
-<article class="product-detail">
-  <div class="product-image">
-    {% if product.image %}
-      <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width:360px;">
-    {% endif %}
-  </div>
-  <div class="product-info">
-    <h1>{{ product.name }}</h1>
-    <div class="muted">Категорія: {{ product.category.name }}</div>
-    <p>{{ product.description|linebreaks }}</p>
-    <p class="price"><strong>{{ product.price }} ₴</strong></p>
-    <p class="stock">Наявність: {{ product.stock }} шт.</p>
+{% load static %}
 
-    {% if user.is_authenticated %}
-      {% if user == product.seller %}
-        <p><a href="{% url 'products:update' slug=product.slug %}" class="btn-edit">Редагувати товар</a></p>
-      {% elif not user.is_seller and product.stock > 0 %}
-        <div class="add-to-cart-section">
-          <form method="post" action="{% url 'orders:add_to_cart' product.id %}">
-            {% csrf_token %}
-            <div class="quantity-selector">
-              <label for="quantity">Кількість:</label>
-              <input type="number" 
-                     id="quantity" 
-                     name="quantity" 
-                     value="1" 
-                     min="1" 
-                     max="{{ product.stock }}"
-                     style="width: 80px; margin: 0 10px; padding: 8px;">
-            </div>
-            <button type="submit" class="btn-add-to-cart">🛒 Додати до кошика</button>
-          </form>
-        </div>
-      {% elif not user.is_seller and product.stock == 0 %}
-        <p class="out-of-stock">Товар закінчився</p>
-      {% endif %}
-    {% else %}
-      <p class="login-required">Увійдіть в систему, щоб додати товар до кошика</p>
-    {% endif %}
-  </div>
-</article>
+{% block title %}{{ product.name }} - Tavero{% endblock %}
 
 <style>
-.product-detail {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 30px;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.product-image {
-    text-align: center;
-}
-
-.product-info h1 {
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.price {
-    font-size: 1.5em;
-    color: #2c5aa0;
+.payment-method-selector {
     margin: 20px 0;
-}
-
-.stock {
-    color: #666;
-    margin-bottom: 20px;
-}
-
-.add-to-cart-section {
-    margin: 20px 0;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 8px;
+    padding: 15px;
     border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
 }
 
-.quantity-selector {
-    margin-bottom: 15px;
-}
-
-.quantity-selector label {
+.payment-method-selector label {
+    display: block;
     font-weight: bold;
+    margin-bottom: 10px;
     color: #333;
 }
 
-.btn-add-to-cart {
-    background-color: #28a745;
-    color: white;
-    padding: 12px 24px;
-    border: none;
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid #e0e0e0;
     border-radius: 6px;
-    font-size: 16px;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.payment-option:hover {
+    border-color: #2c5aa0;
+    background-color: #f0f8ff;
+}
+
+.payment-option input[type="radio"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+.payment-option input[type="radio"]:checked + label {
+    color: #2c5aa0;
     font-weight: bold;
 }
 
-.btn-add-to-cart:hover {
-    background-color: #218838;
-}
-
-.btn-edit {
-    display: inline-block;
-    background-color: #ffc107;
-    color: #333;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: bold;
-}
-
-.btn-edit:hover {
-    background-color: #e0a800;
-    color: #333;
-    text-decoration: none;
-}
-
-.out-of-stock {
-    color: #dc3545;
-    font-weight: bold;
-    font-size: 1.1em;
-}
-
-.login-required {
-    color: #666;
-    font-style: italic;
+.payment-option label {
+    cursor: pointer;
+    margin: 0;
+    font-size: 16px;
 }
 
 @media (max-width: 768px) {
-    .product-detail {
-        grid-template-columns: 1fr;
-        gap: 20px;
+    .payment-options {
+        gap: 8px;
+    }
+    
+    .payment-option {
+        padding: 8px;
+    }
+    
+    .payment-option label {
+        font-size: 14px;
     }
 }
 </style>
+
+{% block content %}
+<div class="product-detail">
+    <div class="product-header">
+        <nav class="breadcrumb">
+            <a href="{% url 'home' %}">Головна</a> &gt;
+            <a href="{% url 'products:list' %}">Товари</a> &gt;
+            {% if product.category %}
+                <a href="{% url 'products:list' %}?category={{ product.category.slug }}">{{ product.category.name }}</a> &gt;
+            {% endif %}
+            <span>{{ product.name }}</span>
+        </nav>
+    </div>
+
+    <div class="product-content">
+        <div class="product-images">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-main-image">
+            {% else %}
+                <div class="product-no-image">
+                    <span>🖼️</span>
+                    <p>Зображення відсутнє</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="product-info">
+            <h1 class="product-title">{{ product.name }}</h1>
+            
+            <!-- Rating Display -->
+            <div class="product-rating">
+                <div class="stars">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= product.average_rating %}
+                            <span class="star filled">★</span>
+                        {% else %}
+                            <span class="star">☆</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <span class="rating-text">
+                    {{ product.average_rating|floatformat:1 }} ({{ product.review_count }} відгуків)
+                </span>
+            </div>
+
+            <div class="product-price">
+                <span class="price">{{ product.price }} грн</span>
+            </div>
+
+            <div class="product-description">
+                <h3>Опис товару</h3>
+                <p>{{ product.description|linebreaks }}</p>
+            </div>
+
+            <div class="product-meta">
+                <div class="meta-item">
+                    <strong>Продавець:</strong>
+                    {% if product.seller.seller_profile and product.seller.seller_profile.store_slug %}
+                        <a href="{% url 'accounts:seller_store_view' product.seller.seller_profile.store_slug %}">
+                            {{ product.seller.seller_profile.store_name }}
+                        </a>
+                    {% else %}
+                        <span>{{ product.seller.username }}</span>
+                    {% endif %}
+                </div>
+                <div class="meta-item">
+                    <strong>На складі:</strong>
+                    <span class="stock {% if product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
+                        {% if product.stock > 0 %}
+                            {{ product.stock }} шт.
+                        {% else %}
+                            Немає в наявності
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="meta-item">
+                    <strong>Категорія:</strong>
+                    {% if product.category %}
+                        <a href="{% url 'products:list' %}?category={{ product.category.slug }}">
+                            {{ product.category.name }}
+                        </a>
+                    {% else %}
+                        Без категорії
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if user.is_authenticated and not user.is_seller and product.stock > 0 %}
+                <form method="post" action="{% url 'orders:add_to_cart' product.id %}" class="add-to-cart-form">
+                    {% csrf_token %}
+                    <div class="quantity-selector">
+                        <label for="quantity">Кількість:</label>
+                        <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control">
+                    </div>
+                    
+                    <div class="payment-method-selector">
+                        <label>Спосіб оплати:</label>
+                        <div class="payment-options">
+                            {% for payment_method in payment_methods %}
+                                <div class="payment-option">
+                                    <input type="radio" name="payment_method" id="payment_{{ payment_method.id }}" value="{{ payment_method.id }}" {% if forloop.first %}checked{% endif %}>
+                                    <label for="payment_{{ payment_method.id }}">{{ payment_method.icon }} {{ payment_method.name }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-large">
+                        🛒 Додати до кошика
+                    </button>
+                </form>
+            {% elif user.is_seller %}
+                <div class="seller-actions">
+                    <a href="{% url 'products:update' product.slug %}" class="btn btn-secondary">✏️ Редагувати</a>
+                    <a href="{% url 'products:delete' product.slug %}" class="btn btn-danger">🗑️ Видалити</a>
+                </div>
+            {% elif product.stock == 0 %}
+                <div class="out-of-stock-message">
+                    <p>Товар тимчасово відсутній на складі</p>
+                </div>
+            {% else %}
+                <div class="login-required">
+                    <p>Будь ласка, <a href="{% url 'accounts:login' %}">увійдіть</a> для додавання товару до кошика</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="reviews-section">
+        <h2>Відгуки ({{ product.review_count }})</h2>
+        
+        {% if user.is_authenticated and not user.is_seller %}
+            {% if user_review and user_review.user %}
+                <div class="user-review">
+                    <h3>Ваш відгук</h3>
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="stars">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= user_review.rating %}
+                                        <span class="star filled">★</span>
+                                    {% else %}
+                                        <span class="star">☆</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <span class="review-date">{{ user_review.created_at|date:"d.m.Y" }}</span>
+                        </div>
+                        <p class="review-comment">{{ user_review.comment }}</p>
+                        <div class="review-actions">
+                            <a href="{% url 'products:edit_review' user_review.id %}" class="btn btn-sm btn-secondary">Редагувати</a>
+                            <a href="{% url 'products:delete_review' user_review.id %}" class="btn btn-sm btn-danger">Видалити</a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="add-review">
+                    <h3>Залишити відгук</h3>
+                    {% if review_form %}
+                        <form method="post" class="review-form">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="{{ review_form.rating.id_for_label }}">Оцінка:</label>
+                                {{ review_form.rating }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ review_form.comment.id_for_label }}">Коментар:</label>
+                                {{ review_form.comment }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Надіслати відгук</button>
+                        </form>
+                    {% else %}
+                        <p>Помилка: Форма відгуку недоступна</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% elif not user.is_authenticated %}
+            <div class="login-required">
+                <p>Будь ласка, <a href="{% url 'accounts:login' %}">увійдіть</a> для залишення відгуку</p>
+            </div>
+        {% elif user.is_seller %}
+            <div class="seller-notice">
+                <p>Продавці не можуть залишати відгуки на товари</p>
+            </div>
+        {% endif %}
+
+        <div class="reviews-list">
+            {% for review in reviews %}
+                {% if review != user_review and review.user %}
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <span class="reviewer-name">{{ review.user.username }}</span>
+                                <div class="stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= review.rating %}
+                                            <span class="star filled">★</span>
+                                        {% else %}
+                                            <span class="star">☆</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <span class="review-date">{{ review.created_at|date:"d.m.Y" }}</span>
+                        </div>
+                        <p class="review-comment">{{ review.comment }}</p>
+                    </div>
+                {% endif %}
+            {% empty %}
+                <p class="no-reviews">Поки що немає відгуків для цього товару.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

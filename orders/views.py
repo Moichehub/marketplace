@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
-from .models import Order, OrderItem
+from .models import Order, OrderItem, PaymentMethod
+from .forms import PaymentMethodForm
 from products.models import Product
 
 def add_to_cart(request, product_id):
@@ -17,6 +18,7 @@ def add_to_cart(request, product_id):
     
     product = get_object_or_404(Product, id=product_id, is_active=True)
     quantity = int(request.POST.get('quantity', 1))
+    payment_method_id = request.POST.get('payment_method')
     
     if quantity <= 0:
         messages.error(request, "Кількість повинна бути більше 0.")
@@ -32,6 +34,15 @@ def add_to_cart(request, product_id):
         status='pending',
         defaults={'status': 'pending'}
     )
+    
+    # Set payment method if provided
+    if payment_method_id:
+        try:
+            payment_method = PaymentMethod.objects.get(id=payment_method_id, is_active=True)
+            order.payment_method = payment_method
+            order.save()
+        except PaymentMethod.DoesNotExist:
+            messages.warning(request, "Обраний спосіб оплати недоступний.")
     
     # Check if product is already in cart
     order_item, created = OrderItem.objects.get_or_create(
@@ -70,10 +81,16 @@ def cart_view(request):
         items = []
         total = 0
     
+    # Get available payment methods for the cart
+    payment_methods = PaymentMethod.objects.filter(is_active=True)
+    payment_form = PaymentMethodForm()
+    
     context = {
         'order': order,
         'items': items,
         'total': total,
+        'payment_methods': payment_methods,
+        'payment_form': payment_form,
     }
     return render(request, 'orders/cart.html', context)
 
