@@ -28,14 +28,12 @@ def add_to_cart(request, product_id):
         messages.error(request, f"На складі доступно лише {product.stock} одиниць цього товару.")
         return redirect('products:detail', slug=product.slug)
     
-    # Get or create a pending order (cart)
     order, created = Order.objects.get_or_create(
         customer=request.user,
         status='pending',
         defaults={'status': 'pending'}
     )
     
-    # Set payment method if provided
     if payment_method_id:
         try:
             payment_method = PaymentMethod.objects.get(id=payment_method_id, is_active=True)
@@ -44,7 +42,6 @@ def add_to_cart(request, product_id):
         except PaymentMethod.DoesNotExist:
             messages.warning(request, "Обраний спосіб оплати недоступний.")
     
-    # Check if product is already in cart
     order_item, created = OrderItem.objects.get_or_create(
         order=order,
         product=product,
@@ -52,7 +49,6 @@ def add_to_cart(request, product_id):
     )
     
     if not created:
-        # Product already in cart, update quantity
         new_quantity = order_item.quantity + quantity
         if new_quantity > product.stock:
             messages.error(request, f"Загальна кількість не може перевищувати {product.stock} одиниць.")
@@ -81,7 +77,6 @@ def cart_view(request):
         items = []
         total = 0
     
-    # Get available payment methods for the cart
     payment_methods = PaymentMethod.objects.filter(is_active=True)
     payment_form = PaymentMethodForm()
     
@@ -143,18 +138,15 @@ def checkout(request):
             messages.error(request, "Ваш кошик порожній.")
             return redirect('orders:cart')
         
-        # Check stock availability
         for item in items:
             if item.quantity > item.product.stock:
                 messages.error(request, f"Товар '{item.product.name}' недоступний у такій кількості.")
                 return redirect('orders:cart')
         
-        # Update stock
         for item in items:
             item.product.stock -= item.quantity
             item.product.save()
         
-        # Mark order as paid
         order.status = 'paid'
         order.save()
         

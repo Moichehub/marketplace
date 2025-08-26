@@ -22,20 +22,16 @@ class SellerProfile(models.Model):
     description = models.TextField(max_length=2000, blank=True, help_text="Опис магазину")
     logo = models.ImageField(upload_to="store_logos/", blank=True, null=True, help_text="Логотип магазину")
     
-    # Contact Information
     phone = models.CharField(max_length=20, blank=True, help_text="Номер телефону")
     email_contact = models.EmailField(blank=True, help_text="Email для зв'язку")
     website = models.URLField(blank=True, help_text="Веб-сайт магазину")
     
-    # Payment Information
     payment_info = models.TextField(max_length=1000, blank=True, help_text="Інформація про способи оплати")
     shipping_info = models.TextField(max_length=1000, blank=True, help_text="Інформація про доставку")
     
-    # Store Settings
     is_active = models.BooleanField(default=True, help_text="Активний магазин")
     auto_accept_orders = models.BooleanField(default=False, help_text="Автоматично приймати замовлення")
     
-    # Social Media
     facebook = models.URLField(blank=True, help_text="Facebook сторінка")
     instagram = models.URLField(blank=True, help_text="Instagram сторінка")
     telegram = models.CharField(max_length=100, blank=True, help_text="Telegram username")

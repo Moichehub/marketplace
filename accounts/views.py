@@ -56,7 +56,6 @@ def seller_profile_setup(request):
         messages.error(request, "Ця сторінка доступна тільки для продавців")
         return redirect("products:list")
     
-    # Check if profile already exists
     try:
         profile = request.user.seller_profile
         messages.info(request, "Профіль магазину вже налаштований")
@@ -125,7 +124,6 @@ def seller_profile_view(request):
         messages.error(request, "Профіль магазину не знайдено. Будь ласка, створіть його.")
         return redirect("accounts:seller_profile_setup")
     
-    # Get seller statistics
     total_products = profile.total_products
     total_reviews = profile.total_reviews
     avg_rating = profile.average_rating
@@ -145,10 +143,8 @@ def seller_store_view(request, store_slug):
     """Public view of a seller's store"""
     profile = get_object_or_404(SellerProfile, store_slug=store_slug, is_active=True)
     
-    # Get seller's active products
     products = profile.user.products.filter(is_active=True).order_by('-created_at')
     
-    # Get store statistics
     total_products = products.count()
     total_reviews = profile.total_reviews
     avg_rating = profile.average_rating

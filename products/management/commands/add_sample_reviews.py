@@ -20,7 +20,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         count = options['count']
         
-        # Get all products
         products = Product.objects.filter(is_active=True)
         if not products.exists():
             self.stdout.write(
@@ -28,7 +27,6 @@ class Command(BaseCommand):
             )
             return
         
-        # Get buyer users (non-sellers)
         buyers = User.objects.filter(is_seller=False)
         if not buyers.exists():
             self.stdout.write(
@@ -36,7 +34,6 @@ class Command(BaseCommand):
             )
             return
         
-        # Sample review comments
         sample_comments = [
             "Відмінний товар! Дуже задоволений покупкою.",
             "Якість на висоті, рекомендую всім!",
@@ -58,16 +55,13 @@ class Command(BaseCommand):
         reviews_created = 0
         
         for product in products:
-            # Create reviews for each product
             for i in range(min(count, len(buyers))):
                 buyer = buyers[i]
                 
-                # Check if user already reviewed this product
                 if Review.objects.filter(product=product, user=buyer).exists():
                     continue
                 
-                # Create review
-                rating = random.randint(3, 5)  # Mostly positive ratings
+                rating = random.randint(3, 5)
                 comment = random.choice(sample_comments)
                 
                 review = Review.objects.create(
@@ -89,7 +83,6 @@ class Command(BaseCommand):
             )
         )
         
-        # Show some statistics
         for product in products:
             avg_rating = product.average_rating
             review_count = product.review_count

@@ -47,29 +47,22 @@ def product_detail(request, slug):
         messages.error(request, "Помилка при завантаженні товару")
         return redirect('products:list')
     
-    # Get reviews for the product (only those with valid users)
     try:
-        # Use a simple approach with select_related but handle errors gracefully
         reviews = product.reviews.filter(user__isnull=False).select_related('user').order_by('-created_at')
     except Exception as e:
         print(f"Error getting reviews: {e}")
-        # Fallback to simple query without select_related
         reviews = product.reviews.filter(user__isnull=False).order_by('-created_at')
     
-    # Check if user has already reviewed this product
     user_review = None
     if request.user.is_authenticated and not request.user.is_seller:
         try:
             user_review = product.reviews.filter(user=request.user).first()
         except Exception as e:
-            # Log the error and continue without user_review
             print(f"Error getting user review: {e}")
             user_review = None
     
-    # Initialize form as None
     form = None
     
-    # Handle review submission
     if request.method == "POST" and request.user.is_authenticated and not request.user.is_seller:
         form = ReviewForm(request.POST, user=request.user, product=product)
         
@@ -85,10 +78,8 @@ def product_detail(request, slug):
                 print(f"Error saving review: {e}")
                 messages.error(request, "Помилка при збереженні відгуку. Спробуйте ще раз.")
     elif request.user.is_authenticated and not request.user.is_seller:
-        # Only create form for authenticated non-seller users
         form = ReviewForm(user=request.user, product=product)
     
-    # Get available payment methods for the add to cart form
     payment_methods = PaymentMethod.objects.filter(is_active=True)
     
     context = {
@@ -99,17 +90,6 @@ def product_detail(request, slug):
         "payment_methods": payment_methods,
     }
     
-    # Debug: Print context information (only for development)
-    # print(f"Debug - User authenticated: {request.user.is_authenticated}")
-    # print(f"Debug - User is seller: {getattr(request.user, 'is_seller', False)}")
-    # print(f"Debug - User review exists: {user_review is not None}")
-    # print(f"Debug - Form exists: {form is not None}")
-    # if form:
-    #     print(f"Debug - Form fields: {list(form.fields.keys())}")
-    #     if form.errors:
-    #         print(f"Debug - Form errors: {form.errors}")
-    
-    # Debug: Check if any reviews have issues
     try:
         for review in reviews:
             if review.user is None:
@@ -134,7 +114,6 @@ def add_review(request, slug):
     
     product = get_object_or_404(Product, slug=slug, is_active=True)
     
-    # Check if user already reviewed this product
     if product.reviews.filter(user=request.user).exists():
         messages.error(request, "Ви вже залишили відгук для цього товару")
         return redirect('products:detail', slug=slug)
@@ -209,12 +188,10 @@ def product_create(request):
             prod.seller = request.user
             prod.save()
             
-            # Check if slug was generated properly
             if prod.slug:
                 messages.success(request, f"Товар '{prod.name}' успішно створено!")
                 return redirect("products:detail", slug=prod.slug)
             else:
-                # If slug is empty, redirect to seller dashboard
                 messages.success(request, f"Товар '{prod.name}' успішно створено!")
                 return redirect("products:seller_dashboard")
     else:
@@ -242,7 +219,6 @@ def product_update(request, slug):
             return redirect("products:detail", slug=prod.slug)
         else:
             messages.error(request, "Будь ласка, виправте помилки в формі.")
-            # Log form errors for debugging
             for field, errors in form.errors.items():
                 for error in errors:
                     print(f"Form error in {field}: {error}")
@@ -277,25 +253,20 @@ def seller_dashboard(request):
     """Dashboard for sellers to manage their products"""
     require_seller(request.user)
     
-    # Get all products by the seller
     products = Product.objects.filter(seller=request.user).order_by('-created_at')
     
-    # Apply filters if provided
     q = request.GET.get("q")
     if q:
         products = products.filter(Q(name__icontains=q) | Q(description__icontains=q))
     
-    # Get seller profile
     try:
         seller_profile = request.user.seller_profile
     except Exception:
         seller_profile = None
     
-    # Get statistics
     total_products = products.count()
     active_products = products.filter(is_active=True).count()
     
-    # Calculate reviews and ratings safely
     total_reviews = 0
     total_rating = 0
     product_count = 0
@@ -327,13 +298,11 @@ def create_sample_data(request):
     from django.contrib.auth import get_user_model
     User = get_user_model()
     
-    # Create categories
     categories = {}
     for cat_name in ['Electronics', 'Clothing', 'Books', 'Home & Garden', 'Sports']:
         cat, created = Category.objects.get_or_create(name=cat_name)
         categories[cat_name] = cat
     
-    # Create sellers
     sellers = {}
     for username, email in [
         ('techstore', 'tech@example.com'), 
@@ -351,37 +320,31 @@ def create_sample_data(request):
             seller.save()
         sellers[username] = seller
     
-    # Add products
     products_data = [
-        # TechStore products
         ('techstore', 'iPhone 15 Pro', 'Latest iPhone with advanced features', 999.99, 'Electronics'),
         ('techstore', 'MacBook Air M2', 'Lightweight laptop with M2 chip', 1199.99, 'Electronics'),
         ('techstore', 'Sony Headphones', 'Premium noise-cancelling headphones', 349.99, 'Electronics'),
         ('techstore', 'Samsung Galaxy S24', 'Android flagship with AI features', 899.99, 'Electronics'),
         ('techstore', 'iPad Pro', 'Professional tablet with M2 chip', 1099.99, 'Electronics'),
         
-        # Fashion products
         ('fashion', 'Denim Jacket', 'Classic denim jacket for any occasion', 89.99, 'Clothing'),
         ('fashion', 'Premium T-Shirt', 'Soft, breathable cotton t-shirt', 24.99, 'Clothing'),
         ('fashion', 'Leather Bag', 'Stylish leather crossbody bag', 129.99, 'Clothing'),
         ('fashion', 'Running Shoes', 'Comfortable running shoes', 79.99, 'Clothing'),
         ('fashion', 'Sunglasses', 'Trendy sunglasses with UV protection', 159.99, 'Clothing'),
         
-        # BookWorld products
         ('books', 'The Great Gatsby', 'F. Scott Fitzgerald classic novel', 12.99, 'Books'),
         ('books', 'Python Programming Guide', 'Complete guide to Python programming', 29.99, 'Books'),
         ('books', 'The Art of War', 'Sun Tzu military treatise', 9.99, 'Books'),
         ('books', 'Harry Potter Book 1', 'J.K. Rowling magical first book', 15.99, 'Books'),
         ('books', 'The Hobbit', 'J.R.R. Tolkien fantasy adventure', 13.99, 'Books'),
         
-        # Home Improvement products
         ('home', 'LED Desk Lamp', 'Adjustable LED lamp with multiple levels', 49.99, 'Home & Garden'),
         ('home', 'Garden Tool Set', 'Complete set of gardening tools', 89.99, 'Home & Garden'),
         ('home', 'Kitchen Mixer', 'Professional stand mixer for baking', 199.99, 'Home & Garden'),
         ('home', 'Smart Thermostat', 'WiFi-enabled thermostat', 149.99, 'Home & Garden'),
         ('home', 'Cordless Drill', 'Powerful cordless drill', 129.99, 'Home & Garden'),
         
-        # Sports World products
         ('sports', 'Basketball', 'Official size basketball', 29.99, 'Sports'),
         ('sports', 'Yoga Mat', 'Non-slip yoga mat for workouts', 34.99, 'Sports'),
         ('sports', 'Tennis Racket', 'Professional tennis racket', 89.99, 'Sports'),

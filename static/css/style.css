@@ -1,4 +1,4 @@
-/* Modern Marketplace CSS */
+
 :root {
     --primary-color: #2563eb;
     --primary-hover: #1d4ed8;
@@ -37,7 +37,7 @@ body {
     padding: 0 1rem;
 }
 
-/* Header Styles */
+
 header {
     background: var(--bg-primary);
     box-shadow: var(--shadow-sm);
@@ -106,7 +106,7 @@ header .container {
     font-weight: 500;
 }
 
-/* Language Switcher */
+
 .language-switcher {
     position: relative;
     margin-left: 1rem;
@@ -145,7 +145,7 @@ header .container {
     font-size: 0.875rem;
 }
 
-/* Header Buttons */
+
 .btn-add, .btn-login, .btn-register, .btn-seller, .btn-logout, .btn-dashboard {
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
@@ -247,12 +247,11 @@ header .container {
     color: white;
 }
 
-/* Main Content */
+
 main {
     min-height: calc(100vh - 200px);
 }
 
-/* Authentication Pages */
 .auth-container {
     max-width: 400px;
     margin: 2rem auto;
@@ -306,7 +305,7 @@ main {
     margin-bottom: 0;
 }
 
-/* Alert Messages */
+
 .alert {
     padding: 1rem;
     border-radius: 0.5rem;
@@ -332,7 +331,7 @@ main {
     color: #92400e;
 }
 
-/* Product Form */
+
 .product-form-container {
     max-width: 800px;
     margin: 2rem auto;
@@ -389,7 +388,7 @@ main {
     min-width: 120px;
 }
 
-/* Hero Section */
+
 .hero {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
     color: white;
@@ -438,7 +437,7 @@ main {
     flex-wrap: wrap;
 }
 
-/* Features Section */
+
 .features {
     padding: 4rem 0;
     background: var(--bg-primary);
@@ -489,7 +488,7 @@ main {
     line-height: 1.6;
 }
 
-/* Product Grid */
+
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -866,7 +865,7 @@ main {
     min-width: 120px;
 }
 
-/* Product Detail */
+
 .product-detail {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -905,7 +904,7 @@ main {
     margin-bottom: 1.5rem;
 }
 
-/* Forms */
+
 .filters {
     display: flex;
     gap: 1rem;
@@ -935,7 +934,7 @@ main {
     box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
 }
 
-/* Buttons */
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -983,7 +982,7 @@ main {
     box-shadow: var(--shadow-md);
 }
 
-/* Pagination */
+
 .pagination {
     display: flex;
     justify-content: center;
@@ -1044,7 +1043,7 @@ main {
     font-weight: 600;
 }
 
-/* Footer */
+
 footer {
     background: var(--bg-primary);
     border-top: 1px solid var(--border-color);
@@ -1058,7 +1057,7 @@ footer p {
     margin: 0;
 }
 
-/* Call to Action Section */
+
 .cta-section {
     background: linear-gradient(135deg, var(--accent-color) 0%, #059669 100%);
     color: white;
@@ -1094,7 +1093,7 @@ footer p {
     min-width: 150px;
 }
 
-/* Stats Section */
+
 .stats-section {
     background: var(--bg-primary);
     padding: 4rem 0;
@@ -1134,7 +1133,7 @@ footer p {
     font-weight: 600;
 }
 
-/* Form Elements */
+
 .form-group {
     display: flex;
     flex-direction: column;
@@ -1186,7 +1185,7 @@ footer p {
     justify-content: center;
 }
 
-/* Links */
+
 .link-primary {
     color: var(--primary-color);
     text-decoration: none;
@@ -1197,7 +1196,7 @@ footer p {
     text-decoration: underline;
 }
 
-/* Add to Cart Button */
+
 .btn-add-to-cart {
     background: linear-gradient(135deg, var(--accent-color) 0%, #059669 100%);
     color: white;
@@ -1215,7 +1214,7 @@ footer p {
     box-shadow: var(--shadow-md);
 }
 
-/* Edit Button */
+
 .btn-edit {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
     color: white;
@@ -1233,7 +1232,7 @@ footer p {
     box-shadow: var(--shadow-md);
 }
 
-/* Rating and Review Styles */
+
 .product-rating {
     display: flex;
     align-items: center;
@@ -1366,7 +1365,7 @@ footer p {
     color: var(--text-primary);
 }
 
-/* Seller Profile Styles */
+
 .seller-profile-form {
     max-width: 800px;
     margin: 0 auto;
@@ -1480,7 +1479,7 @@ footer p {
     border-top: 1px solid var(--border-color);
 }
 
-/* Seller Dashboard Enhancements */
+
 .seller-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1509,7 +1508,7 @@ footer p {
     font-size: 0.9rem;
 }
 
-/* Store View Styles */
+
 .store-header {
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
@@ -1577,7 +1576,7 @@ footer p {
     background-color: var(--bg-accent);
 }
 
-/* Responsive Design for New Features */
+
 @media (max-width: 768px) {
     .review-header {
         flex-direction: column;
@@ -1632,7 +1631,7 @@ footer p {
     }
 }
 
-/* Review Page Styles */
+
 .add-review-page,
 .edit-review-page {
     max-width: 800px;
@@ -1771,7 +1770,7 @@ footer p {
     margin-bottom: 1rem;
 }
 
-/* Delete Review Page */
+
 .delete-review-page {
     max-width: 600px;
     margin: 0 auto;
@@ -1837,7 +1836,7 @@ footer p {
     font-size: 0.9rem;
 }
 
-/* Responsive Design for Review Pages */
+
 @media (max-width: 768px) {
     .add-review-page,
     .edit-review-page,
@@ -1880,7 +1879,7 @@ footer p {
     }
 }
 
-/* Store Page Styles */
+
 .store-page {
     max-width: 1200px;
     margin: 0 auto;
@@ -1985,7 +1984,7 @@ footer p {
     margin: 0;
 }
 
-/* Responsive Design for Store Page */
+
 @media (max-width: 768px) {
     .store-page {
         padding: 1rem 0;

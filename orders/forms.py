@@ -11,7 +11,6 @@ class PaymentMethodForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Customize the radio buttons with icons
         choices = []
         for payment_method in PaymentMethod.objects.filter(is_active=True):
             display_text = f"{payment_method.icon} {payment_method.name}"
@@ -20,3 +19,4 @@ class PaymentMethodForm(forms.Form):
             choices.append((payment_method.id, display_text))
         
         self.fields['payment_method'].choices = [('', "Оберіть спосіб оплати")] + choices
+

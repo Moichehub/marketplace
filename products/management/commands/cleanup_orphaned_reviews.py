@@ -15,7 +15,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         dry_run = options['dry_run']
         
-        # Find orphaned reviews (reviews without users)
+
         orphaned_reviews = Review.objects.filter(user__isnull=True)
         count = orphaned_reviews.count()
         
@@ -31,12 +31,12 @@ class Command(BaseCommand):
                     f'DRY RUN: Would delete {count} orphaned reviews:'
                 )
             )
-            for review in orphaned_reviews[:10]:  # Show first 10
+            for review in orphaned_reviews[:10]:
                 self.stdout.write(f'  - Review ID {review.id} for product "{review.product.name}"')
             if count > 10:
                 self.stdout.write(f'  ... and {count - 10} more')
         else:
-            # Actually delete the orphaned reviews
+
             orphaned_reviews.delete()
             self.stdout.write(
                 self.style.SUCCESS(
@@ -44,7 +44,7 @@ class Command(BaseCommand):
                 )
             )
         
-        # Also check for reviews with invalid users (users that don't exist)
+
         invalid_user_reviews = Review.objects.filter(user__isnull=False).exclude(
             user__in=Review.objects.values_list('user', flat=True).distinct()
         )

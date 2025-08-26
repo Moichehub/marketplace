@@ -35,7 +35,7 @@ class Product(models.Model):
         Category,
         on_delete=models.CASCADE,
         related_name="products",
-        null=True,  # тимчасово, щоб уникнути помилок при існуючих рядках
+        null=True,
         blank=True
     )
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="products")
@@ -51,13 +51,10 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug and self.name:
-            # Generate slug from name
             base_slug = slugify(self.name)
             if not base_slug:
-                # If slugify returns empty string, use a fallback
                 base_slug = f"product-{self.id}" if self.id else "product"
             
-            # Ensure uniqueness
             slug = base_slug
             counter = 1
             while Product.objects.filter(slug=slug).exclude(id=self.id).exists():
@@ -98,7 +95,7 @@ class Review(models.Model):
     class Meta:
         verbose_name = "Відгук"
         verbose_name_plural = "Відгуки"
-        unique_together = ['product', 'user']  # One review per user per product
+        unique_together = ['product', 'user']
         ordering = ['-created_at']
 
     def __str__(self):
@@ -128,7 +125,6 @@ class Review(models.Model):
             if self.user == self.product.seller:
                 raise ValidationError("Sellers cannot review their own products")
         except Exception:
-            # If user relationship is broken, skip validation
             pass
 
 

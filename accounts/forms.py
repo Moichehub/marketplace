@@ -59,6 +59,5 @@ class SellerProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance and self.instance.pk:
-            # If editing existing profile, make store_name read-only
             self.fields['store_name'].widget.attrs['readonly'] = True
             self.fields['store_name'].help_text = "Назву магазину неможливо змінити після створення"

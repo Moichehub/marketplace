@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write('🔧 Fixing products with empty slugs...')
         
-        # Find products with empty slugs
+
         empty_slugs = Product.objects.filter(slug='')
         
         if not empty_slugs:
@@ -22,20 +22,20 @@ class Command(BaseCommand):
         for product in empty_slugs:
             self.stdout.write(f'  Fixing: {product.name} (ID: {product.id})')
             
-            # Generate slug from name
+
             base_slug = slugify(product.name)
             if not base_slug:
-                # If slugify returns empty string, use a fallback
+
                 base_slug = f"product-{product.id}"
             
-            # Ensure uniqueness
+
             slug = base_slug
             counter = 1
             while Product.objects.filter(slug=slug).exclude(id=product.id).exists():
                 slug = f"{base_slug}-{counter}"
                 counter += 1
             
-            # Update the product
+
             product.slug = slug
             product.save()
             

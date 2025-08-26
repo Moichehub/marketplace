@@ -1,5 +1,3 @@
-# Generated manually for Review model
-
 from django.db import migrations, models
 import django.db.models.deletion
 import django.core.validators

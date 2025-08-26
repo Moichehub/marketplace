@@ -17,7 +17,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS('=== Adding Products to Sellers ===\n'))
         
-        # Create categories
         categories_data = [
             'Electronics',
             'Clothing', 
@@ -38,7 +37,6 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(f"✓ Category exists: {cat_name}")
         
-        # Create or get sellers
         sellers_data = [
             {
                 'username': 'techstore',
@@ -89,7 +87,6 @@ class Command(BaseCommand):
                 self.stdout.write(f"✓ Seller exists: {seller_data['name']} ({seller_data['username']})")
             sellers[seller_data['username']] = seller
         
-        # Define comprehensive products for each seller
         products_data = {
             'techstore': [
                 {
@@ -278,7 +275,6 @@ class Command(BaseCommand):
             }
         }
         
-        # Create products
         total_created = 0
         total_updated = 0
         
@@ -288,7 +284,6 @@ class Command(BaseCommand):
             
             for product_data in products:
                 if options['force']:
-                    # Delete existing product if force option is used
                     Product.objects.filter(name=product_data['name'], seller=seller).delete()
                 
                 product, created = Product.objects.get_or_create(
@@ -307,7 +302,6 @@ class Command(BaseCommand):
                     self.stdout.write(f"  ✓ Created: {product.name} - ${product.price}")
                     total_created += 1
                 else:
-                    # Update existing product
                     product.description = product_data['description']
                     product.price = product_data['price']
                     product.stock = product_data['stock']
@@ -317,7 +311,6 @@ class Command(BaseCommand):
                     self.stdout.write(f"  ✓ Updated: {product.name} - ${product.price}")
                     total_updated += 1
         
-        # Summary
         self.stdout.write(f"\n🎉 Successfully processed products!")
         self.stdout.write(f"📊 New products created: {total_created}")
         self.stdout.write(f"📊 Products updated: {total_updated}")
@@ -333,7 +326,6 @@ class Command(BaseCommand):
         self.stdout.write("\n✅ Products have been successfully added to sellers!")
         self.stdout.write("🌐 You can now browse the marketplace at http://127.0.0.1:8000/products/")
         
-        # Seller login information
         self.stdout.write("\n🔑 Seller Login Information:")
         for username in sellers.keys():
             self.stdout.write(f"  Username: {username} | Password: sellerpass123")

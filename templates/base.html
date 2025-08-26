@@ -6,38 +6,11 @@
   <meta charset="utf-8" />
   <title>{% block title %}Tavero{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- HTMX disabled to prevent conflicts with seller buttons -->
-  <!-- <script src="https://unpkg.com/htmx.org@1.9.12" defer></script> -->
+
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <script>
-    // Debug and fix seller buttons
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('DOM loaded, checking seller buttons...');
-      
-      const sellerButtons = document.querySelectorAll('.btn-dashboard, .btn-add');
-      console.log('Found seller buttons:', sellerButtons.length);
-      
-      sellerButtons.forEach(function(button, index) {
-        console.log(`Button ${index}:`, button.textContent, button.href);
-        
-        // Remove any event listeners that might be blocking
-        button.onclick = null;
-        
-        // Add simple click handler
-        button.addEventListener('click', function(e) {
-          console.log('Button clicked:', this.href);
-          // Allow normal navigation
-          return true;
-        });
-        
-        // Ensure button is clickable
-        button.style.pointerEvents = 'auto';
-        button.style.cursor = 'pointer';
-        button.style.position = 'relative';
-        button.style.zIndex = '1000';
-      });
-    });
-  </script>
+
+
+
 </head>
 <body>
   <header>
@@ -59,7 +32,7 @@
         {% if user.is_authenticated %}
           <span class="welcome-text">Вітаю, {{ user.username }}!</span>
           {% if user.is_seller %}
-            <!-- SELLER BUTTONS START -->
+
             <a href="{% url 'products:seller_dashboard' %}" class="btn-dashboard" style="display: inline-block !important; pointer-events: auto !important; cursor: pointer !important; z-index: 1000 !important;">📊 Панель</a>
             <a href="{% url 'products:create' %}" class="btn-add" style="display: inline-block !important; pointer-events: auto !important; cursor: pointer !important; z-index: 1000 !important;">➕ Додати товар</a>
             {% if user.seller_profile %}
@@ -67,9 +40,9 @@
             {% else %}
                 <a href="{% url 'accounts:seller_profile_setup' %}" class="btn-profile" style="display: inline-block !important; pointer-events: auto !important; cursor: pointer !important; z-index: 1000 !important;">🏪 Налаштувати магазин</a>
             {% endif %}
-            <!-- SELLER BUTTONS END -->
+
           {% else %}
-            <!-- NOT A SELLER - User: {{ user.username }}, is_seller: {{ user.is_seller }} -->
+
           {% endif %}
           <a href="{% url 'accounts:logout' %}" class="btn-logout">Вийти</a>
         {% else %}

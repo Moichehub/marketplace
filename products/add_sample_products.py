@@ -10,7 +10,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write("=== Adding Sample Products to Sellers ===\n")
         
-        # Create categories
         categories_data = [
             'Electronics',
             'Clothing', 
@@ -31,7 +30,6 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(f"✓ Category exists: {cat_name}")
         
-        # Create or get sellers
         sellers_data = [
             {
                 'username': 'techstore',
@@ -72,7 +70,6 @@ class Command(BaseCommand):
                 self.stdout.write(f"✓ Seller exists: {seller_data['name']}")
             sellers[seller_data['username']] = seller
         
-        # Define products for each seller
         products_data = {
             'techstore': [
                 {
@@ -196,7 +193,6 @@ class Command(BaseCommand):
             }
         }
         
-        # Create products
         total_created = 0
         for seller_username, products in products_data.items():
             seller = sellers[seller_username]
@@ -220,7 +216,6 @@ class Command(BaseCommand):
                 else:
                     self.stdout.write(f"  ✓ Already exists: {product.name}")
         
-        # Summary
         self.stdout.write(f"\n🎉 Successfully added {total_created} new products!")
         self.stdout.write(f"📊 Total sellers: {len(sellers)}")
         self.stdout.write(f"📊 Total categories: {len(categories)}")
