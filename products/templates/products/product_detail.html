@@ -60,11 +60,11 @@
     .payment-options {
         gap: 8px;
     }
-    
+
     .payment-option {
         padding: 8px;
     }
-    
+
     .payment-option label {
         font-size: 14px;
     }
@@ -98,7 +98,7 @@
 
         <div class="product-info">
             <h1 class="product-title">{{ product.name }}</h1>
-            
+
             <!-- Rating Display -->
             <div class="product-rating">
                 <div class="stars">
@@ -164,7 +164,7 @@
                         <label for="quantity">Кількість:</label>
                         <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control">
                     </div>
-                    
+
                     <div class="payment-method-selector">
                         <label>Спосіб оплати:</label>
                         <div class="payment-options">
@@ -176,7 +176,7 @@
                             {% endfor %}
                         </div>
                     </div>
-                    
+
                     <button type="submit" class="btn btn-primary btn-large">
                         🛒 Додати до кошика
                     </button>
@@ -201,7 +201,7 @@
     <!-- Reviews Section -->
     <div class="reviews-section">
         <h2>Відгуки ({{ product.review_count }})</h2>
-        
+
         {% if user.is_authenticated and not user.is_seller %}
             {% if user_review and user_review.user %}
                 <div class="user-review">

@@ -13,9 +13,9 @@
                 <h3>Замовлення #{{ order.id }}</h3>
                 <span class="order-date">{{ order.created_at|date:"d.m.Y H:i" }}</span>
             </div>
-            
+
             <div class="order-status">
-                Статус: 
+                Статус:
                 {% if order.status == 'pending' %}
                     <span class="status-pending">Очікує оплати</span>
                 {% elif order.status == 'paid' %}
@@ -24,7 +24,7 @@
                     <span class="status-shipped">Відправлено</span>
                 {% endif %}
             </div>
-            
+
             <div class="order-items-summary">
                 {% for item in order.items.all %}
                 <div class="order-item-summary">
@@ -34,11 +34,11 @@
                 </div>
                 {% endfor %}
             </div>
-            
+
             <div class="order-total">
                 <strong>Загальна сума: {{ order.items.all|sum_total }} грн</strong>
             </div>
-            
+
             <div class="order-actions">
                 <a href="{% url 'orders:order_detail' order.id %}" class="btn-view-details">Переглянути деталі</a>
             </div>

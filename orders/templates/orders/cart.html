@@ -15,36 +15,36 @@
                 <p class="item-price">Ціна: {{ item.product.price }} грн</p>
                 <p class="item-stock">На складі: {{ item.product.stock }} шт.</p>
             </div>
-            
+
             <div class="item-actions">
                 <form method="post" action="{% url 'orders:update_cart_item' item.id %}" style="display: inline;">
                     {% csrf_token %}
                     <label for="quantity-{{ item.id }}">Кількість:</label>
-                    <input type="number" 
-                           id="quantity-{{ item.id }}" 
-                           name="quantity" 
-                           value="{{ item.quantity }}" 
-                           min="1" 
+                    <input type="number"
+                           id="quantity-{{ item.id }}"
+                           name="quantity"
+                           value="{{ item.quantity }}"
+                           min="1"
                            max="{{ item.product.stock }}"
                            style="width: 60px; margin: 0 10px;">
                     <button type="submit" class="btn-update">Оновити</button>
                 </form>
-                
+
                 <form method="post" action="{% url 'orders:remove_from_cart' item.id %}" style="display: inline; margin-left: 10px;">
                     {% csrf_token %}
                     <button type="submit" class="btn-remove">Видалити</button>
                 </form>
             </div>
-            
+
             <div class="item-total">
                 <strong>Сума: {{ item.product.price|multiply:item.quantity }} грн</strong>
             </div>
         </div>
         {% endfor %}
-        
+
         <div class="cart-summary">
             <h2>Загальна сума: {{ total }} грн</h2>
-            
+
             {% if order.payment_method %}
                 <div class="selected-payment">
                     <h3>Обраний спосіб оплати:</h3>
@@ -61,7 +61,7 @@
                     <p>⚠️ Спосіб оплати не обрано. Будь ласка, додайте товар знову та оберіть спосіб оплати.</p>
                 </div>
             {% endif %}
-            
+
             <form method="post" action="{% url 'orders:checkout' %}">
                 {% csrf_token %}
                 <button type="submit" class="btn-checkout" {% if not order.payment_method %}disabled{% endif %}>

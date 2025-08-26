@@ -12,7 +12,7 @@
             <a href="{% url 'products:detail' product.slug %}">{{ product.name }}</a> &gt;
             <span>Додати відгук</span>
         </nav>
-        
+
         <h1>🌟 Додати відгук</h1>
         <p class="product-info">
             Товар: <strong>{{ product.name }}</strong>
@@ -22,7 +22,7 @@
     <div class="review-form-container">
         <form method="post" class="review-form">
             {% csrf_token %}
-            
+
             <div class="form-group">
                 <label for="{{ form.rating.id_for_label }}">Ваша оцінка *</label>
                 {{ form.rating }}

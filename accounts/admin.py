@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, SellerProfile
+
+from .models import SellerProfile, User
 
 
 @admin.register(User)
@@ -19,25 +20,21 @@ class SellerProfileAdmin(admin.ModelAdmin):
     prepopulated_fields = {"store_slug": ["store_name"]}
     readonly_fields = ["created_at", "updated_at"]
     list_editable = ["is_active"]
-    
+
     fieldsets = (
-        ("Основна інформація", {
-            "fields": ("user", "store_name", "store_slug", "description", "logo")
-        }),
-        ("Контактна інформація", {
-            "fields": ("phone", "email_contact", "website")
-        }),
-        ("Інформація про оплату та доставку", {
-            "fields": ("payment_info", "shipping_info")
-        }),
-        ("Налаштування магазину", {
-            "fields": ("is_active", "auto_accept_orders")
-        }),
-        ("Соціальні мережі", {
-            "fields": ("facebook", "instagram", "telegram")
-        }),
-        ("Метадані", {
-            "fields": ("created_at", "updated_at"),
-            "classes": ("collapse",)
-        }),
+        (
+            "Основна інформація",
+            {"fields": ("user", "store_name", "store_slug", "description", "logo")},
+        ),
+        ("Контактна інформація", {"fields": ("phone", "email_contact", "website")}),
+        (
+            "Інформація про оплату та доставку",
+            {"fields": ("payment_info", "shipping_info")},
+        ),
+        ("Налаштування магазину", {"fields": ("is_active", "auto_accept_orders")}),
+        ("Соціальні мережі", {"fields": ("facebook", "instagram", "telegram")}),
+        (
+            "Метадані",
+            {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
+        ),
     )

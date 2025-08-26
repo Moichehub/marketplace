@@ -12,11 +12,11 @@
             {% else %}
                 <div class="store-logo-placeholder">🏪</div>
             {% endif %}
-            
+
             <div class="store-details">
                 <h1>{{ profile.store_name }}</h1>
                 <p class="store-description">{{ profile.description|linebreaks }}</p>
-                
+
                 <div class="store-stats">
                     <div class="stat-item">
                         <span class="stat-number">{{ total_products }}</span>
@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="profile-actions">
             <a href="{% url 'accounts:seller_profile_edit' %}" class="btn btn-primary">✏️ Редагувати профіль</a>
             <a href="{% url 'products:seller_dashboard' %}" class="btn btn-secondary">📊 Панель продавця</a>
@@ -54,14 +54,14 @@
                         <span class="contact-text">{{ profile.phone }}</span>
                     </div>
                 {% endif %}
-                
+
                 {% if profile.email %}
                     <div class="contact-item">
                         <span class="contact-icon">📧</span>
                         <span class="contact-text">{{ profile.email }}</span>
                     </div>
                 {% endif %}
-                
+
                 {% if profile.address %}
                     <div class="contact-item">
                         <span class="contact-icon">📍</span>
@@ -282,25 +282,24 @@
         flex-direction: column;
         text-align: center;
     }
-    
+
     .profile-info {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .store-stats {
         justify-content: center;
     }
-    
+
     .profile-actions {
         flex-direction: row;
         justify-content: center;
     }
-    
+
     .profile-content {
         grid-template-columns: 1fr;
     }
 }
 </style>
 {% endblock %}
-

@@ -1,39 +1,45 @@
-from django.core.management.base import BaseCommand
-from django.contrib.auth import get_user_model
-from products.models import Product, Review
 import random
+
+from django.contrib.auth import get_user_model
+from django.core.management.base import BaseCommand
+
+from products.models import Product, Review
 
 User = get_user_model()
 
 
 class Command(BaseCommand):
-    help = 'Add sample reviews to products for testing'
+    help = "Add sample reviews to products for testing"
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--count',
+            "--count",
             type=int,
             default=10,
-            help='Number of reviews to create per product'
+            help="Number of reviews to create per product",
         )
 
     def handle(self, *args, **options):
-        count = options['count']
-        
+        count = options["count"]
+
         products = Product.objects.filter(is_active=True)
         if not products.exists():
             self.stdout.write(
-                self.style.ERROR('No active products found. Please create some products first.')
+                self.style.ERROR(
+                    "No active products found. Please create some products first."
+                )
             )
             return
-        
+
         buyers = User.objects.filter(is_seller=False)
         if not buyers.exists():
             self.stdout.write(
-                self.style.ERROR('No buyer users found. Please create some buyer accounts first.')
+                self.style.ERROR(
+                    "No buyer users found. Please create some buyer accounts first."
+                )
             )
             return
-        
+
         sample_comments = [
             "Відмінний товар! Дуже задоволений покупкою.",
             "Якість на висоті, рекомендую всім!",
@@ -51,41 +57,38 @@ class Command(BaseCommand):
             "Відмінний сервіс, все на найвищому рівні.",
             "Дуже задоволений, обов'язково куплю ще.",
         ]
-        
+
         reviews_created = 0
-        
+
         for product in products:
             for i in range(min(count, len(buyers))):
                 buyer = buyers[i]
-                
+
                 if Review.objects.filter(product=product, user=buyer).exists():
                     continue
-                
+
                 rating = random.randint(3, 5)
                 comment = random.choice(sample_comments)
-                
+
                 review = Review.objects.create(
-                    product=product,
-                    user=buyer,
-                    rating=rating,
-                    comment=comment
+                    product=product, user=buyer, rating=rating, comment=comment
                 )
-                
+
                 reviews_created += 1
-                
+
                 self.stdout.write(
-                    f'Created review: {buyer.username} rated {product.name} with {rating} stars'
+                    f"Created review: {buyer.username} rated {product.name} with {rating} stars"
                 )
-        
+
         self.stdout.write(
             self.style.SUCCESS(
-                f'Successfully created {reviews_created} reviews across {products.count()} products'
+                f"Successfully created {reviews_created} reviews across {products.count()} products"
             )
         )
-        
+
         for product in products:
             avg_rating = product.average_rating
             review_count = product.review_count
             self.stdout.write(
-                f'{product.name}: {avg_rating:.1f} stars ({review_count} reviews)'
+                f"{product.name}: {avg_rating:.1f} stars ({review_count} reviews)"
             )

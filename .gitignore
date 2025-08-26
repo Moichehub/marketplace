@@ -33,6 +33,8 @@ poetry.lock
 # Helper scripts
 start.bat
 start.ps1
+format.bat
+format.ps1
 
 
 *.manifest
@@ -199,4 +201,3 @@ htmlcov/
 .coverage.*
 coverage.xml
 *.cover
-

@@ -8,77 +8,87 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0001_initial'),
+        ("products", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='category',
-            options={'verbose_name': 'Категорія', 'verbose_name_plural': 'Категорії'},
+            name="category",
+            options={"verbose_name": "Категорія", "verbose_name_plural": "Категорії"},
         ),
         migrations.AlterModelOptions(
-            name='product',
-            options={'verbose_name': 'Товар', 'verbose_name_plural': 'Товари'},
+            name="product",
+            options={"verbose_name": "Товар", "verbose_name_plural": "Товари"},
         ),
         migrations.AddField(
-            model_name='category',
-            name='slug',
+            model_name="category",
+            name="slug",
             field=models.SlugField(blank=True, unique=True),
         ),
         migrations.AddField(
-            model_name='product',
-            name='is_active',
+            model_name="product",
+            name="is_active",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='product',
-            name='slug',
+            model_name="product",
+            name="slug",
             field=models.SlugField(blank=True, unique=True),
         ),
         migrations.AddField(
-            model_name='product',
-            name='stock',
+            model_name="product",
+            name="stock",
             field=models.PositiveIntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='product',
-            name='updated_at',
+            model_name="product",
+            name="updated_at",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AlterField(
-            model_name='category',
-            name='name',
+            model_name="category",
+            name="name",
             field=models.CharField(max_length=100, unique=True),
         ),
         migrations.AlterField(
-            model_name='product',
-            name='category',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='products', to='products.category'),
+            model_name="product",
+            name="category",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="products",
+                to="products.category",
+            ),
         ),
         migrations.AlterField(
-            model_name='product',
-            name='description',
+            model_name="product",
+            name="description",
             field=models.TextField(blank=True),
         ),
         migrations.AlterField(
-            model_name='product',
-            name='image',
-            field=models.ImageField(blank=True, null=True, upload_to='products/'),
+            model_name="product",
+            name="image",
+            field=models.ImageField(blank=True, null=True, upload_to="products/"),
         ),
         migrations.AlterField(
-            model_name='product',
-            name='name',
+            model_name="product",
+            name="name",
             field=models.CharField(max_length=200),
         ),
         migrations.AlterField(
-            model_name='product',
-            name='price',
+            model_name="product",
+            name="price",
             field=models.DecimalField(decimal_places=2, max_digits=10),
         ),
         migrations.AlterField(
-            model_name='product',
-            name='seller',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products', to=settings.AUTH_USER_MODEL),
+            model_name="product",
+            name="seller",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="products",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

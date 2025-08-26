@@ -13,13 +13,13 @@
             {% else %}
                 <div class="store-logo-placeholder">🏪</div>
             {% endif %}
-            
+
             <div class="store-details">
                 <h1>{{ profile.store_name }}</h1>
                 {% if profile.description %}
                     <p class="store-description">{{ profile.description }}</p>
                 {% endif %}
-                
+
                 <div class="store-meta">
                     <div class="store-meta-item">
                         <span class="meta-icon">📦</span>
@@ -42,7 +42,7 @@
                         </div>
                     {% endif %}
                 </div>
-                
+
                 {% if profile.facebook or profile.instagram or profile.telegram %}
                     <div class="store-social">
                         {% if profile.facebook %}
@@ -69,7 +69,7 @@
                     <p>{{ profile.payment_info|linebreaks }}</p>
                 </div>
             {% endif %}
-            
+
             {% if profile.shipping_info %}
                 <div class="info-card">
                     <h3>🚚 Доставка</h3>
@@ -82,7 +82,7 @@
     <!-- Products Section -->
     <div class="products-section">
         <h2>Товари від {{ profile.store_name }}</h2>
-        
+
         {% if products %}
             <div class="products-grid">
                 {% for product in products %}
@@ -92,12 +92,12 @@
                         {% else %}
                             <div class="no-image">🖼️</div>
                         {% endif %}
-                        
+
                         <div class="product-info">
                             <h3 class="product-title">
                                 <a href="{% url 'products:detail' product.slug %}">{{ product.name }}</a>
                             </h3>
-                            
+
                             <div class="product-rating">
                                 <div class="stars">
                                     {% for i in "12345" %}
@@ -110,9 +110,9 @@
                                 </div>
                                 <span class="rating-text">{{ product.average_rating|floatformat:1 }}</span>
                             </div>
-                            
+
                             <p class="product-price">{{ product.price }} грн</p>
-                            
+
                             <div class="product-meta">
                                 <span class="stock {% if product.stock > 0 %}in-stock{% else %}out-of-stock{% endif %}">
                                     {% if product.stock > 0 %}
@@ -122,7 +122,7 @@
                                     {% endif %}
                                 </span>
                             </div>
-                            
+
                             <div class="card-actions">
                                 <a href="{% url 'products:detail' product.slug %}" class="btn btn-primary btn-sm">Переглянути</a>
                                 {% if user.is_authenticated and not user.is_seller and product.stock > 0 %}

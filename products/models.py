@@ -1,8 +1,7 @@
-
+from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.text import slugify
-from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator, MaxValueValidator
 
 User = get_user_model()
 
@@ -36,7 +35,7 @@ class Product(models.Model):
         on_delete=models.CASCADE,
         related_name="products",
         null=True,
-        blank=True
+        blank=True,
     )
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="products")
     stock = models.PositiveIntegerField(default=0)
@@ -54,13 +53,13 @@ class Product(models.Model):
             base_slug = slugify(self.name)
             if not base_slug:
                 base_slug = f"product-{self.id}" if self.id else "product"
-            
+
             slug = base_slug
             counter = 1
             while Product.objects.filter(slug=slug).exclude(id=self.id).exists():
                 slug = f"{base_slug}-{counter}"
                 counter += 1
-            
+
             self.slug = slug
         super().save(*args, **kwargs)
 
@@ -82,11 +81,13 @@ class Product(models.Model):
 
 
 class Review(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="reviews"
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
     rating = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)],
-        help_text="Rating from 1 to 5"
+        help_text="Rating from 1 to 5",
     )
     comment = models.TextField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -95,8 +96,8 @@ class Review(models.Model):
     class Meta:
         verbose_name = "Відгук"
         verbose_name_plural = "Відгуки"
-        unique_together = ['product', 'user']
-        ordering = ['-created_at']
+        unique_together = ["product", "user"]
+        ordering = ["-created_at"]
 
     def __str__(self):
         try:
@@ -104,12 +105,12 @@ class Review(models.Model):
             return f"Review by {username} on {self.product.name}"
         except Exception:
             return f"Review ID {self.id} on {self.product.name if self.product else 'Unknown Product'}"
-    
+
     @property
     def safe_user(self):
         """Safely get the user, handling cases where the relationship might be broken"""
         try:
-            if hasattr(self, '_cached_user'):
+            if hasattr(self, "_cached_user"):
                 return self._cached_user
             return self.user
         except Exception:
@@ -117,6 +118,7 @@ class Review(models.Model):
 
     def clean(self):
         from django.core.exceptions import ValidationError
+
         try:
             if not self.user:
                 raise ValidationError("Review must have a user")
@@ -126,5 +128,3 @@ class Review(models.Model):
                 raise ValidationError("Sellers cannot review their own products")
         except Exception:
             pass
-
-

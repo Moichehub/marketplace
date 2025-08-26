@@ -11,7 +11,7 @@
         <h1>Підтвердження видалення</h1>
         <p>Ви дійсно хочете видалити товар <strong>"{{ product.name }}"</strong>?</p>
         <p>Ця дія не може бути скасована.</p>
-        
+
         <form method="post" class="delete-actions">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">🗑️ Видалити товар</button>

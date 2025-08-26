@@ -8,7 +8,7 @@
 <div class="order-info">
     <div class="order-header">
         <p><strong>Дата замовлення:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
-        <p><strong>Статус:</strong> 
+        <p><strong>Статус:</strong>
             {% if order.status == 'pending' %}
                 <span class="status-pending">Очікує оплати</span>
             {% elif order.status == 'paid' %}
@@ -18,7 +18,7 @@
             {% endif %}
         </p>
         {% if order.payment_method %}
-            <p><strong>Спосіб оплати:</strong> 
+            <p><strong>Спосіб оплати:</strong>
                 <span class="payment-method">
                     {{ order.payment_method.icon }} {{ order.payment_method.name }}
                 </span>

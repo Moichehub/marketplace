@@ -7,12 +7,12 @@
 <div class="delete-review-page">
     <div class="delete-card">
         <div class="delete-icon">🗑️</div>
-        
+
         <h1>Видалити відгук</h1>
         <p class="delete-message">
             Ви дійсно хочете видалити свій відгук для товару <strong>"{{ product.name }}"</strong>?
         </p>
-        
+
         <div class="review-preview">
             <h3>Ваш відгук:</h3>
             <div class="review-item">
@@ -31,7 +31,7 @@
                 <p class="review-comment">{{ review.comment }}</p>
             </div>
         </div>
-        
+
         <div class="delete-actions">
             <form method="post">
                 {% csrf_token %}
@@ -39,7 +39,7 @@
             </form>
             <a href="{% url 'products:detail' product.slug %}" class="btn btn-secondary">Скасувати</a>
         </div>
-        
+
         <div class="warning-message">
             <p>⚠️ Ця дія не може бути скасована. Відгук буде видалено назавжди.</p>
         </div>

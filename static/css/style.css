@@ -1583,34 +1583,34 @@ footer p {
         align-items: flex-start;
         gap: 0.5rem;
     }
-    
+
     .reviewer-info {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.5rem;
     }
-    
+
     .form-sections {
         gap: 1rem;
     }
-    
+
     .form-section {
         padding: 1rem;
     }
-    
+
     .form-actions {
         flex-direction: column;
     }
-    
+
     .seller-stats {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .store-info {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .store-meta {
         justify-content: center;
     }
@@ -1620,11 +1620,11 @@ footer p {
     .seller-stats {
         grid-template-columns: 1fr;
     }
-    
+
     .review-item {
         padding: 1rem;
     }
-    
+
     .add-review,
     .user-review {
         padding: 1rem;
@@ -1843,21 +1843,21 @@ footer p {
     .delete-review-page {
         padding: 1rem 0;
     }
-    
+
     .review-form-container {
         padding: 1.5rem;
     }
-    
+
     .product-card {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .delete-actions {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .delete-actions .btn {
         width: 100%;
         max-width: 200px;
@@ -1868,12 +1868,12 @@ footer p {
     .review-form-container {
         padding: 1rem;
     }
-    
+
     .product-preview,
     .current-review {
         padding: 1rem;
     }
-    
+
     .delete-review-page .delete-card {
         padding: 1.5rem;
     }
@@ -1989,20 +1989,20 @@ footer p {
     .store-page {
         padding: 1rem 0;
     }
-    
+
     .store-info {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .store-meta {
         justify-content: center;
     }
-    
+
     .store-info-section {
         grid-template-columns: 1fr;
     }
-    
+
     .products-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 1rem;
@@ -2013,11 +2013,11 @@ footer p {
     .products-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .store-header {
         padding: 1rem;
     }
-    
+
     .info-card {
         padding: 1rem;
     }

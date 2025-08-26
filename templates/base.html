@@ -18,7 +18,7 @@
       <div class="header-left">
         <a href="{% url 'home' %}" class="logo">🛍️ Tavero</a>
       </div>
-      
+
       <nav class="nav-links">
         <a href="{% url 'home' %}">🏠 Головна</a>
         <a href="{% url 'products:list' %}">🛍️ Товари</a>
@@ -50,7 +50,7 @@
           <a href="{% url 'accounts:register' %}" class="btn-register">Реєстрація</a>
           <a href="{% url 'accounts:seller_register' %}" class="btn-seller">Продавець</a>
         {% endif %}
-        
+
         <div class="language-switcher">
           <form action="{% url 'set_language' %}" method="post">
             {% csrf_token %}

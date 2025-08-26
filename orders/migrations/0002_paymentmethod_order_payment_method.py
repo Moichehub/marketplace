@@ -7,28 +7,48 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('orders', '0001_initial'),
+        ("orders", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PaymentMethod',
+            name="PaymentMethod",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, unique=True)),
-                ('description', models.TextField(blank=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('icon', models.CharField(blank=True, help_text='Emoji or icon for the payment method', max_length=50)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100, unique=True)),
+                ("description", models.TextField(blank=True)),
+                ("is_active", models.BooleanField(default=True)),
+                (
+                    "icon",
+                    models.CharField(
+                        blank=True,
+                        help_text="Emoji or icon for the payment method",
+                        max_length=50,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Спосіб оплати',
-                'verbose_name_plural': 'Способи оплати',
-                'ordering': ['name'],
+                "verbose_name": "Спосіб оплати",
+                "verbose_name_plural": "Способи оплати",
+                "ordering": ["name"],
             },
         ),
         migrations.AddField(
-            model_name='order',
-            name='payment_method',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='orders.paymentmethod'),
+            model_name="order",
+            name="payment_method",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="orders.paymentmethod",
+            ),
         ),
     ]
