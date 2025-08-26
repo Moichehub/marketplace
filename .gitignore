@@ -27,6 +27,13 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Poetry
+poetry.lock
+
+# Helper scripts
+start.bat
+start.ps1
+
 
 *.manifest
 *.spec

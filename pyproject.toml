@@ -1,21 +1,40 @@
-[project]
+[tool.poetry]
 name = "pythonmarketplase"
 version = "0.1.0"
-description = ""
-authors = [
-    {name = "EgorGorb",email = "egorgorb12@gmail.com"}
-]
-license = {text = "n"}
+description = "Django marketplace application"
+authors = ["EgorGorb <egorgorb12@gmail.com>"]
+license = "MIT"
 readme = "README.md"
-requires-python = " 3.12.10"
-dependencies = [
-    "django (>=5.2,<6.0)",
-    "django-filter (>=25.1,<26.0)",
-    "django-render-block (>=0.11,<0.12)",
-    "pillow (>=11.3.0,<12.0.0)",
-]
+packages = [{include = "marketplace"}]
 
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.2.5"
+pillow = "^10.1.0"
+django-filter = "^23.3"
+django-crispy-forms = "^2.0"
+crispy-bootstrap5 = "^0.7"
+django-htmx = "^1.17.2"
+python-decouple = "^3.8"
+whitenoise = "^6.6.0"
+gunicorn = "^21.2.0"
+psycopg2-binary = "^2.9.9"
+redis = "^5.0.1"
+celery = "^5.3.4"
+django-celery-beat = "^2.5.0"
+django-celery-results = "^2.5.1"
+django-debug-toolbar = "^4.2.0"
+
+[tool.poetry.group.dev.dependencies]
+coverage = "^7.3.2"
+pytest = "^7.4.3"
+pytest-django = "^4.7.0"
+factory-boy = "^3.3.0"
+faker = "^20.1.0"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+start = "marketplace.manage:main"
